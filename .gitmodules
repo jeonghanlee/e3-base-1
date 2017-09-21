@@ -1,0 +1,9 @@
+[submodule "epics-base"]
+	path = epics-base
+	url = https://github.com/epics-base/epics-base
+	ignore = all
+[submodule "eee-env"]
+	path = eee-env
+	url = https://github.com/icshwi/eee-env
+	branch = master
+	ignore = all
