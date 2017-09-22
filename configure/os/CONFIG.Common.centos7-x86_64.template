@@ -1,0 +1,9 @@
+# -*- mode: makefile; -*-
+# CentOS 7
+
+# Include definitions common to linux pentium targets
+include $(CONFIG)/os/CONFIG.Common.linux-x86_64
+
+COMMANDLINE_LIBRARY = READLINE
+
+PYTHONHOME = /usr

@@ -1,0 +1,111 @@
+# -*- mode: makefile; -*-
+# Include definitions common to all linux targets
+include $(CONFIG)/os/CONFIG.Common.linuxCommon
+
+ARCH_CLASS = ppc64
+
+ARCH_DEP_CFLAGS += -m64
+ARCH_DEP_CPPFLAGS += -D_ppc_64_
+ARCH_DEP_CXXFLAGS += -m64 
+ARCH_DEP_LDFLAGS += -m64
+
+
+TOOLCHAIN_VER=current
+TOOLCHAIN=fsl
+TOOLCHAIN_SUFFIX=-qoriq
+
+
+# TOOLCHAIN=
+# TOOLCHAIN_VER=
+# TOOLCHAIN_SUFFIX=
+# If your crosscompiler name has a GNU target prefix like <gnutarget>-gcc,
+# e.g. powerpc64-fsl-linux-gcc, put a GNU_TARGET definition in
+
+# EPICS Variable GNU_TARGET
+# is the same as TARGET_PREFIX in environment-setup-ppc64e6500-fsl-linux
+# except the suffix "-"
+#
+GNU_TARGET=powerpc64-$(TOOLCHAIN)-linux
+
+SYSROOTS=/opt/$(TOOLCHAIN)$(TOOLCHAIN_SUFFIX)/$(TOOLCHAIN_VER)/sysroots
+
+# Local SDKTARGETSYSROOT is defined in environment-setup-ppc64e6500-fsl-linux
+#
+SDKTARGETSYSROOT=$(SYSROOTS)/ppc64e6500-$(TOOLCHAIN)-linux
+
+CROSS_INCLUDES =	
+
+ARCH_DEP_CFLAGS   += --sysroot=$(SDKTARGETSYSROOT)
+ARCH_DEP_CPPFLAGS += --sysroot=$(SDKTARGETSYSROOT)
+ARCH_DEP_CXXFLAGS += --sysroot=$(SDKTARGETSYSROOT)
+ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT)
+
+# # ifeq ($(BUILD_CLASS),CROSS)
+# #   VALID_BUILDS = Ioc
+# # endif
+
+ARCH_DEP_CFLAGS   += -pipe -feliminate-unused-debug-types -mhard-float -mcpu=e6500
+ARCH_DEP_CPPFLAGS += -mhard-float -mcpu=e6500
+ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types -mhard-float -mcpu=e6500 
+ARCH_DEP_LDFLAGS  += 
+#-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed
+
+# OK to compile with gcc
+# powerpc64-poky-linux-g++ (GCC) 6.2.0
+#ARCH_DEP_CXXFLAGS += -std=gnu++98
+#ARCH_DEP_CXXFLAGS += -std=gnu++03
+#ARCH_DEP_CXXFLAGS += -std=gnu++11
+#ARCH_DEP_CXXFLAGS += -std=gnu++14
+
+#
+#../epicsExceptionTest.cpp: In function ‘void epicsExceptionTestPrivate()’:
+#../epicsExceptionTest.cpp:61:49: error: size of array is too large
+#         char * p = new char [unsuccessfulNewSize];
+#                                                 ^
+#../epicsExceptionTest.cpp:74:38: error: size of array is too large
+#             char [unsuccessfulNewSize];
+
+
+OECORE_NATIVE=x86_64-$(TOOLCHAIN)sdk-linux
+
+# GNU_TARGET and GNU_DIR reu
+# EPICS GNU_DIR is the same as
+#
+GNU_DIR=$(SYSROOTS)/$(OECORE_NATIVE)/usr
+
+# GNU_BIN is defined in CONFIG.gnuCommon as follows:
+# GNU_BIN = $(GNU_DIR)/bin
+# However, toolchain has the GNU_TARGET after bin
+GNU_BIN=$(GNU_DIR)/bin/$(GNU_TARGET)
+
+# GNU_GARGET_LIB_DIR is defined in CONFIG.CrossCommon as follows:
+# GNU_TARGET_LIB_DIR = $(GNU_TARGET:%= $(GNU_DIR)/%/lib)
+# However, the toolchain han no GNU_TARGET after lib
+#
+GNU_TARGET_LIB_DIR=$(GNU_DIR)/lib
+
+
+# QorIQ SDK (FSL Reference Distro)
+# http://www.nxp.com/products/software-and-tools/run-time-software/linux-sdk/linux-sdk-for-qoriq-processors:SDKLINUX
+#
+## fsl-qoriq toolchain should be installed in the following structures:
+# jhlee@kaffee: ~$ tree -L 2 /opt/fsl-qoriq/
+# /opt/fsl-qoriq/
+# ├── [root     4.0K]  1.9
+# │   ├── [root     2.4K]  environment-setup-ppc64e6500-fsl-linux
+# │   ├── [root     2.4K]  environment-setup-ppc64e6500-fsl-linux~
+# │   ├── [root     2.5K]  environment-setup-ppce6500-fslmllib32-linux
+# │   ├── [root      11K]  site-config-ppc64e6500-fsl-linux
+# │   ├── [root      11K]  site-config-ppce6500-fslmllib32-linux
+# │   ├── [root     4.0K]  sysroots
+# │   ├── [root      124]  version-ppc64e6500-fsl-linux
+# │   └── [root      124]  version-ppce6500-fslmllib32-linux
+# └── [root     4.0K]  2.0
+#   ├── [root     2.9K]  environment-setup-ppc64e6500-fsl-linux
+#   ├── [root      44K]  site-config-ppc64e6500-fsl-linux
+#   ├── [root     4.0K]  sysroots
+#   └── [root      124]  version-ppc64e6500-fsl-linux
+
+
+PYTHONHOME=$(SDKTARGETSYSROOT)/usr
+

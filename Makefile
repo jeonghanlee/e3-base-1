@@ -56,18 +56,11 @@ env:
 	@echo "EPICS_BASE_TAG         : "$(EPICS_BASE_TAG)
 	@echo "EPICS_BASE_SRC_PATH    : "$(EPICS_BASE_SRC_PATH)
 	@echo ""
-	@echo "EPICS_MODULE_NAME      : "$(EPICS_MODULE_NAME)
-	@echo "EPICS_MODULE_TAG       : "$(EPICS_MODULE_TAG)
-	@echo "EPICS_MODULE_SRC_PATH  : "$(EPICS_MODULE_SRC_PATH)
-	@echo "ESS_MODULE_MAKEFILE    : "$(ESS_MODULE_MAKEFILE)
-	@echo "PROJECT                : "$(PROJECT)
-	@echo "LIBVERSION             : "$(LIBVERSION)
-	@echo ""
 
 	@echo "EEE_BASE_VERSION       : "$(EEE_BASE_VERSION)
 	@echo "EEE_BASES_PATH         : "$(EEE_BASES_PATH)
 	@echo "EEE_MODULES_PATH       : "$(EEE_MODULES_PATH)
-
+	@echo ""
 
 	@echo "EPICS_BASES_PATH       : "$(EPICS_BASES_PATH)
 	@echo "EPICS_MODULES_PATH     : "$(EPICS_MODULES_PATH)
@@ -75,15 +68,18 @@ env:
 	@echo "EPICS_ENV_PATH         : "$(EPICS_ENV_PATH)
 	@echo ""
 
+	@echo "CROSS_COMPILER_TARGET_ARCHS : " $(CROSS_COMPILER_TARGET_ARCHS)
+	@echo "EPICS_SITE_VERSION          : " $(EPICS_SITE_VERSION)
+	@echo ""
 
 
 dirs:
 	@echo $(M_DIRS) || true
 
-## 
-init:
-	git submodule init $(EPICS_BASE_NAME)
-	git submodule update --init --recursive $(EPICS_BASE_NAME)/.
+## Must run the first time ever
+once:
+	@git submodule init $(EPICS_BASE_NAME)
+	@git submodule update --init --recursive $(EPICS_BASE_NAME)/.
 
 
 
@@ -94,7 +90,7 @@ git-submodule-sync:
 
 
 ## Initialize $(EPICS_BASE_NAME) with $(EPICS_BASE_TAG)
-base-init:  git-submodule-sync
+init:   git-submodule-sync
 	@git submodule deinit -f $(EPICS_BASE_NAME)/
 	git submodule deinit -f $(EPICS_BASE_NAME)/
 	sed -i '/submodule/,$$d'  $(TOP)/.git/config	
@@ -104,48 +100,29 @@ base-init:  git-submodule-sync
 
 
 ## Build $(EPICS_BASE_NAME)
-base-build: base-init
+build: prepare
 	$(MAKE) -C $(EPICS_BASE_NAME)
 
 
 ## Clean only $(EPICS_BASE_NAME).
-base-clean:
+clean:
 	$(MAKE) -C $(EPICS_BASE_NAME) clean
 
 
+## Rebuild $(EPICS_BASE_NAME).
+rebuild:
+	$(MAKE) -C $(EPICS_BASE_NAME) rebuild
 
+## Prepare EPICS BASE SITE Configuration
+prepare: 
+	@m4 -DCCTA="$(CROSS_COMPILER_TARGET_ARCHS)" -DINSTALL_LOC="$(EEE_BASES_PATH)" -DSITE_VERSION="$(EPICS_SITE_VERSION)" $(TOP)/configure/CONFIG_SITE.m4 >  $(EPICS_BASE)/configure/CONFIG_SITE
+	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/   
 
-## Get      EPICS Module, and change its $(EPICS_MODULE_TAG)
-env-init: git-submodule-sync
-	@git submodule deinit -f $(EPICS_MODULE_NAME)/
-	git submodule deinit -f $(EPICS_MODULE_NAME)/	
-	git submodule init $(EPICS_MODULE_NAME)/
-	git submodule update --init --remote --recursive $(EPICS_MODULE_NAME)/.
-#	cd $(EPICS_MODULE_NAME) && git checkout tags/$(EPICS_MODULE_TAG)
-
-
-## Build     EPICS Module in order to use it with EEE
-env-build: 
-	$(MAKE) -C $(EPICS_MODULE_NAME) build
-
-
-## Install   EPICS Module in order to use it with EEE
-env-install:
-	$(MAKE) -C $(EPICS_MODULE_NAME) install
-
-
-## Clean     EPICS Module in terms of EEE Makefile (module.Makefile)
-env-clean:
-	$(MAKE) -C $(EPICS_MODULE_NAME) clean
-
-
-## Distclean EPICS Module in terms of EEE Makefile (module.Makefile)
-env-distclean:
-	$(MAKE) -C $(EPICS_MODULE_NAME) distclean
+ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
+	@install -m 664 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/	
+endif
 
 
 
 
-.PHONY: help env dirs init git-msync base-init base-clean base-build env-install env-build env-clean env-distclean env-init
-
-
+.PHONY: help env dirs init git-msync base-init build clean rebuild

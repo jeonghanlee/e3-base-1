@@ -3,28 +3,35 @@
 # For example, https://github.com/epics-module/devlib2
 # devlib2 is EPICS_MODULE_NAME
 # 
-export EPICS_BASE_NAME:=epics-base
+EPICS_BASE_NAME:=epics-base
 
 # (EPICS) EPICS_MODULE_TAG
 # The EPICS community tag number, which we would like to install
 # within ESS EPICS Environment (ESS)
 
-export EPICS_BASE_TAG:=R3.15.4
+EPICS_BASE_TAG:=R3.15.4
 
 # (LOCAL) EPICS_MODULE_PATH
 # Usually, it is the directory in $(TOP), after cloning the repository
 # However, some modules from ESS have the weird directory structure. 
 # If one use the cloned directory, one should define the proper source
 # directory path in $(ESS_MODULE_MAKEFILE)
-export EPICS_BASE_SRC_PATH:=$(EPICS_BASE_NAME)
+EPICS_BASE_SRC_PATH:=$(EPICS_BASE_NAME)
 
 
 unexport EPICS_BASE
 unexport EPICS_HOST_ARCH
+unexport EPICS_MODULES_PATH
+unexport EPICS_BASES_PATH
+unexport BASE
+unexport EPICS_ENV_PATH
 
 EPICS_BASE=$(TOP)/$(EPICS_BASE_NAME)
 EPICS_HOST_ARCH := $(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
 
+export EPICS_BASE_NAME
+export EPICS_BASE_TAG
+export EPICS_BASE_SRC_PATH
 
 export EPICS_BASE
 export EPICS_HOST_ARCH
@@ -32,14 +39,19 @@ export EPICS_HOST_ARCH
 
 
 EEE_BASE_VERSION=3.15.4
-EEE_BASES_PATH=/eee/bases
-EEE_MODULES_PATH=/eee/modules
+#EEE_BASES_PATH=/eee/bases
+#EEE_MODULES_PATH=/eee/modules
 
 
+# Don't want to touch configure/CONFIG_SITE, 
+# We might inject that info into...
 
-# (EPICS) EPICS_MODULE_NAME 
-# The EPICS community MODULE name. 
-# For example, https://github.com/epics-module/devlib2
-# devlib2 is EPICS_MODULE_NAME
-# 
-EPICS_MODULE_NAME:=eee-env
+CROSS_COMPILER_TARGET_ARCHS=linux-ppc64e6500
+#CROSS_COMPILER_TARGET_ARCHS+=linux-arm
+EPICS_SITE_VERSION=EEE-$(EEE_BASE_VERSION)
+
+export CROSS_COMPILER_TARGET_ARCHS
+export EPICS_SITE_VERSION
+
+# However, we would like to keep CONFIG_SITE_ENV as the seperated file
+#
