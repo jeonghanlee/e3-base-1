@@ -50,23 +50,23 @@ default: help
 ## Print ENV variables
 env:
 	@echo ""
-	@echo "EPICS_BASE_NAME        : "$(EPICS_BASE_NAME)
-	@echo "EPICS_BASE_TAG         : "$(EPICS_BASE_TAG)
-	@echo "EPICS_BASE_SRC_PATH    : "$(EPICS_BASE_SRC_PATH)
+	@echo "EPICS_BASE_NAME             : "$(EPICS_BASE_NAME)
+	@echo "EPICS_BASE_TAG              : "$(EPICS_BASE_TAG)
+	@echo "EPICS_BASE_SRC_PATH         : "$(EPICS_BASE_SRC_PATH)
 	@echo ""
-	@echo "EPICS_BASE             : "$(EPICS_BASE)
-	@echo "EPICS_HOST_ARCH        : "$(EPICS_HOST_ARCH)
+	@echo "EPICS_BASE                  : "$(EPICS_BASE)
+	@echo "EPICS_HOST_ARCH             : "$(EPICS_HOST_ARCH)
 	@echo ""
 
-#	@echo "EEE_BASE_VERSION       : "$(EEE_BASE_VERSION)
-#	@echo "EEE_BASES_PATH         : "$(EEE_BASES_PATH)
-#	@echo "EEE_MODULES_PATH       : "$(EEE_MODULES_PATH)
+	@echo "EEE_BASE_VERSION            : "$(EEE_BASE_VERSION)
+	@echo "EEE_BASES_PATH              : "$(EEE_BASES_PATH)
+#	@echo "EEE_MODULES_PATH            : "$(EEE_MODULES_PATH)
 #	@echo ""
 
-#	@echo "EPICS_BASES_PATH       : "$(EPICS_BASES_PATH)
-#	@echo "EPICS_MODULES_PATH     : "$(EPICS_MODULES_PATH)
-#	@echo "EPICS_HOST_ARCH        : "$(EPICS_HOST_ARCH)
-#	@echo "EPICS_ENV_PATH         : "$(EPICS_ENV_PATH)
+#	@echo "EPICS_BASES_PATH            : "$(EPICS_BASES_PATH)
+#	@echo "EPICS_MODULES_PATH          : "$(EPICS_MODULES_PATH)
+#	@echo "EPICS_HOST_ARCH             : "$(EPICS_HOST_ARCH)
+#	@echo "EPICS_ENV_PATH              : "$(EPICS_ENV_PATH)
 #	@echo ""
 
 	@echo "CROSS_COMPILER_TARGET_ARCHS : " $(CROSS_COMPILER_TARGET_ARCHS)
@@ -101,7 +101,7 @@ init:   git-submodule-sync
 
 
 ## Build $(EPICS_BASE_NAME)
-build: 
+build: prepare
 	$(MAKE) -C $(EPICS_BASE_NAME)
 
 
@@ -109,18 +109,28 @@ build:
 clean:
 	$(MAKE) -C $(EPICS_BASE_NAME) clean
 
+## In case, sudo permission will make one trouble, rm touched $(EPICS_BASE_NAME)
+distclean:
+	@sudo rm -rf $(EPICS_BASE_NAME)
 
 ## Rebuild $(EPICS_BASE_NAME).
 rebuild:
 	$(MAKE) -C $(EPICS_BASE_NAME) rebuild
 
-## Prepare EPICS BASE SITE Configuration
+
 # Please consult config_site.m4 when one would like to use the different configuration in CONFIG_SITE
 # -D_ options gives an user to select what one wants to do.
-# 
+## Prepare EPICS BASE SITE Configuration
 prepare: 
-	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="$(EPICS_SITE_VERSION)" $(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
-	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/   
+#	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="$(EPICS_SITE_VERSION)"  $(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
+	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" \
+	    -D_EPICS_SITE_VERSION="$(EPICS_SITE_VERSION)" \
+	    -D_INSTALL_LOCATION="$(EEE_BASES_PATH)" \
+	    $(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
+	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
+ifneq (,$(findstring base,$(EEE_BASES_PATH)))
+	@echo "Installation Path : "$(EEE_BASES_PATH)
+endif
 
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
 	@install -m 664 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/

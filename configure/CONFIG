@@ -28,7 +28,7 @@ export EPICS_BASE_NAME:=epics-base
 # The EPICS community tag number, which we would like to install
 # within ESS EPICS Environment (ESS)
 
-export EPICS_BASE_TAG:=R3.15.4
+export EPICS_BASE_TAG:=R3.16.1
 
 # (LOCAL) EPICS_BASE_SRC_PATH
 # Usually, it is the directory in $(TOP), after cloning the repository
@@ -47,20 +47,22 @@ export EPICS_HOST_ARCH := $(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
 
 
 
-EEE_BASE_VERSION=3.15.4
-#EEE_BASES_PATH=/eee/bases
+EEE_BASE_VERSION=3.16.1
+EEE_BASES_PATH=/eee/bases/base-$(EEE_BASE_VERSION)
+#EEE_BASES_PATH=
 #EEE_MODULES_PATH=/eee/modules
 
 
 # Don't want to touch configure/CONFIG_SITE, 
 # We might inject that info into...
-
-CROSS_COMPILER_TARGET_ARCHS=linux-ppc64e6500
+CROSS_COMPILER_TARGET_ARCHS=
+#CROSS_COMPILER_TARGET_ARCHS=linux-ppc64e6500
 #CROSS_COMPILER_TARGET_ARCHS+=linux-arm
+
 EPICS_SITE_VERSION=EEE-$(EEE_BASE_VERSION)
 
 export CROSS_COMPILER_TARGET_ARCHS
 export EPICS_SITE_VERSION
-
+export EEE_BASES_PATH
 # However, we would like to keep CONFIG_SITE_ENV as the seperated file
 #
