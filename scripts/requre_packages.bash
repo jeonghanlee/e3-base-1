@@ -79,10 +79,10 @@ function pkg_list()
 declare -a pkg_deb
 declare -a pkg_rpm
 
-pkg_deb= $(pkg_list ${SC_TOP}/pkg_all_common)
+pkg_deb=$(pkg_list  ${SC_TOP}/pkg_all_common)
 pkg_deb+=$(pkg_list ${SC_TOP}/pkg_deb_epics)
 
-pkg_rpm= $(pkg_list ${SC_TOP}/pkg_all_common)
+pkg_rpm=$(pkg_list  ${SC_TOP}/pkg_all_common)
 pkg_rpm+=$(pkg_list ${SC_TOP}/pkg_rpm_common)
 pkg_rpm+=$(pkg_list ${SC_TOP}/pkg_rpm_epics)
 
