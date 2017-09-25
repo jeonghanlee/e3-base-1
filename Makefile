@@ -16,8 +16,8 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Thursday, September 21 09:35:24 CEST 2017
-# version : 0.0.1
+# Date    : Monday, September 25 13:50:41 CEST 2017
+# version : 0.0.2
 
 TOP = $(CURDIR)
 include $(TOP)/configure/CONFIG
@@ -50,23 +50,24 @@ default: help
 ## Print ENV variables
 env:
 	@echo ""
-	@echo "Temp. EPICS_BASE       : "$(EPICS_BASE)
-	@echo "EPICS_HOST_ARCH        : "$(EPICS_HOST_ARCH)
 	@echo "EPICS_BASE_NAME        : "$(EPICS_BASE_NAME)
 	@echo "EPICS_BASE_TAG         : "$(EPICS_BASE_TAG)
 	@echo "EPICS_BASE_SRC_PATH    : "$(EPICS_BASE_SRC_PATH)
 	@echo ""
-
-	@echo "EEE_BASE_VERSION       : "$(EEE_BASE_VERSION)
-	@echo "EEE_BASES_PATH         : "$(EEE_BASES_PATH)
-	@echo "EEE_MODULES_PATH       : "$(EEE_MODULES_PATH)
-	@echo ""
-
-	@echo "EPICS_BASES_PATH       : "$(EPICS_BASES_PATH)
-	@echo "EPICS_MODULES_PATH     : "$(EPICS_MODULES_PATH)
+	@echo "EPICS_BASE             : "$(EPICS_BASE)
 	@echo "EPICS_HOST_ARCH        : "$(EPICS_HOST_ARCH)
-	@echo "EPICS_ENV_PATH         : "$(EPICS_ENV_PATH)
 	@echo ""
+
+#	@echo "EEE_BASE_VERSION       : "$(EEE_BASE_VERSION)
+#	@echo "EEE_BASES_PATH         : "$(EEE_BASES_PATH)
+#	@echo "EEE_MODULES_PATH       : "$(EEE_MODULES_PATH)
+#	@echo ""
+
+#	@echo "EPICS_BASES_PATH       : "$(EPICS_BASES_PATH)
+#	@echo "EPICS_MODULES_PATH     : "$(EPICS_MODULES_PATH)
+#	@echo "EPICS_HOST_ARCH        : "$(EPICS_HOST_ARCH)
+#	@echo "EPICS_ENV_PATH         : "$(EPICS_ENV_PATH)
+#	@echo ""
 
 	@echo "CROSS_COMPILER_TARGET_ARCHS : " $(CROSS_COMPILER_TARGET_ARCHS)
 	@echo "EPICS_SITE_VERSION          : " $(EPICS_SITE_VERSION)
@@ -100,7 +101,7 @@ init:   git-submodule-sync
 
 
 ## Build $(EPICS_BASE_NAME)
-build: prepare
+build: 
 	$(MAKE) -C $(EPICS_BASE_NAME)
 
 
@@ -114,12 +115,15 @@ rebuild:
 	$(MAKE) -C $(EPICS_BASE_NAME) rebuild
 
 ## Prepare EPICS BASE SITE Configuration
+# Please consult config_site.m4 when one would like to use the different configuration in CONFIG_SITE
+# -D_ options gives an user to select what one wants to do.
+# 
 prepare: 
-	@m4 -DCCTA="$(CROSS_COMPILER_TARGET_ARCHS)" -DINSTALL_LOC="$(EEE_BASES_PATH)" -DSITE_VERSION="$(EPICS_SITE_VERSION)" $(TOP)/configure/CONFIG_SITE.m4 >  $(EPICS_BASE)/configure/CONFIG_SITE
+	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="$(EPICS_SITE_VERSION)" $(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
 	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/   
 
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
-	@install -m 664 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/	
+	@install -m 664 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
 
 

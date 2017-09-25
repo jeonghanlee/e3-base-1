@@ -1,40 +1,49 @@
-# (EPICS) EPICS_MODULE_NAME 
-# The EPICS community MODULE name. 
-# For example, https://github.com/epics-module/devlib2
-# devlib2 is EPICS_MODULE_NAME
-# 
-EPICS_BASE_NAME:=epics-base
+# Disable possible EPICS Environments
 
-# (EPICS) EPICS_MODULE_TAG
-# The EPICS community tag number, which we would like to install
-# within ESS EPICS Environment (ESS)
-
-EPICS_BASE_TAG:=R3.15.4
-
-# (LOCAL) EPICS_MODULE_PATH
-# Usually, it is the directory in $(TOP), after cloning the repository
-# However, some modules from ESS have the weird directory structure. 
-# If one use the cloned directory, one should define the proper source
-# directory path in $(ESS_MODULE_MAKEFILE)
-EPICS_BASE_SRC_PATH:=$(EPICS_BASE_NAME)
-
-
+# (EPICS)
 unexport EPICS_BASE
 unexport EPICS_HOST_ARCH
+
+# (EEE)
 unexport EPICS_MODULES_PATH
 unexport EPICS_BASES_PATH
 unexport BASE
 unexport EPICS_ENV_PATH
 
-EPICS_BASE=$(TOP)/$(EPICS_BASE_NAME)
-EPICS_HOST_ARCH := $(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
+# (Possible Private ones)
+unexport EPICS
+unexport EPICS_BASES
+unexport EPICS_MODULES
+unexport EPICS_PATH
 
-export EPICS_BASE_NAME
-export EPICS_BASE_TAG
-export EPICS_BASE_SRC_PATH
 
-export EPICS_BASE
-export EPICS_HOST_ARCH
+# (EPICS) EPICS_MODULE_NAME 
+# The EPICS community MODULE name. 
+# For example, https://github.com/epics-module/devlib2
+# devlib2 is EPICS_MODULE_NAME
+# 
+export EPICS_BASE_NAME:=epics-base
+
+# (EPICS) EPICS_MODULE_TAG
+# The EPICS community tag number, which we would like to install
+# within ESS EPICS Environment (ESS)
+
+export EPICS_BASE_TAG:=R3.15.4
+
+# (LOCAL) EPICS_BASE_SRC_PATH
+# Usually, it is the directory in $(TOP), after cloning the repository
+export EPICS_BASE_SRC_PATH:=$(EPICS_BASE_NAME)
+
+
+# (EPICS) EPICS_BASE
+# EPICS community, MUST use export 
+export EPICS_BASE=$(TOP)/$(EPICS_BASE_NAME)
+
+
+# (EPICS) EPICS_HOST_ARCH
+# EPICS community, MUST use export 
+export EPICS_HOST_ARCH := $(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
+
 
 
 
