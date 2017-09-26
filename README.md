@@ -11,7 +11,8 @@ This is the pilot project to build the EPICS BASE(s) in order to build the ESS E
 
 ## Procedure
 
-* Edit configure/CONFIG
+* Edit configure/CONFIG.{EPICS,LOCAL}
+* make pkgs (if one needs to install required pgks)
 * make init
 * make build or sudo -E make build (in case EEE_BASES_PATH in a location, where root can access)
 

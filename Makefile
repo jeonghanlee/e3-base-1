@@ -140,7 +140,12 @@ prepare:
 	    $(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
 	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
 ifneq (,$(findstring base,$(EEE_BASES_PATH)))
+	@echo ""
+	@echo "Please check your installation path"
+	@echo "If it needs to have any root permission, one should use sudo "
 	@echo "Installation Path : "$(EEE_BASES_PATH)
+	@echo ""
+	@echo ""
 endif
 
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
