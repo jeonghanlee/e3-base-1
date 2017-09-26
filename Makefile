@@ -20,7 +20,9 @@
 # version : 0.0.2
 
 TOP = $(CURDIR)
-include $(TOP)/configure/CONFIG
+
+include $(TOP)/configure/CONFIG.EPICS
+include $(TOP)/configure/CONFIG.LOCAL
 
 
 M_DIRS:=$(sort $(dir $(wildcard $(TOP)/*/.)))

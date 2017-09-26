@@ -4,19 +4,6 @@
 unexport EPICS_BASE
 unexport EPICS_HOST_ARCH
 
-# (EEE)
-unexport EPICS_MODULES_PATH
-unexport EPICS_BASES_PATH
-unexport BASE
-unexport EPICS_ENV_PATH
-
-# (Possible Private ones)
-unexport EPICS
-unexport EPICS_BASES
-unexport EPICS_MODULES
-unexport EPICS_PATH
-
-
 # (EPICS) EPICS_MODULE_NAME 
 # The EPICS community MODULE name. 
 # For example, https://github.com/epics-module/devlib2
@@ -45,24 +32,3 @@ export EPICS_BASE=$(TOP)/$(EPICS_BASE_NAME)
 export EPICS_HOST_ARCH := $(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
 
 
-
-
-EEE_BASE_VERSION=3.16.1
-EEE_BASES_PATH=/eee/bases/base-$(EEE_BASE_VERSION)
-#EEE_BASES_PATH=
-#EEE_MODULES_PATH=/eee/modules
-
-
-# Don't want to touch configure/CONFIG_SITE, 
-# We might inject that info into...
-CROSS_COMPILER_TARGET_ARCHS=
-#CROSS_COMPILER_TARGET_ARCHS=linux-ppc64e6500
-#CROSS_COMPILER_TARGET_ARCHS+=linux-arm
-
-EPICS_SITE_VERSION=EEE-$(EEE_BASE_VERSION)
-
-export CROSS_COMPILER_TARGET_ARCHS
-export EPICS_SITE_VERSION
-export EEE_BASES_PATH
-# However, we would like to keep CONFIG_SITE_ENV as the seperated file
-#
