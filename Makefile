@@ -16,13 +16,14 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Monday, September 25 13:50:41 CEST 2017
-# version : 0.0.2
+# Date    : Tuesday, September 26 10:44:03 CEST 2017
+# version : 0.0.3
 
 TOP = $(CURDIR)
 
 include $(TOP)/configure/CONFIG.EPICS
 include $(TOP)/configure/CONFIG.LOCAL
+include $(TOP)/configure/CONFIG.PKGS
 
 
 M_DIRS:=$(sort $(dir $(wildcard $(TOP)/*/.)))
@@ -89,7 +90,15 @@ once:
 git-submodule-sync:
 	git submodule sync
 
-
+## Setup the required packages for eee-base
+pkgs: git-submodule-sync
+	@git submodule deinit -f $(PKG_AUTOMATION_NAME)
+	git submodule deinit -f $(PKG_AUTOMATION_NAME)
+	sed -i '/submodule/,$$d'  $(TOP)/.git/config
+	git submodule init $(PKG_AUTOMATION_NAME)
+	git submodule update --init --recursive $(PKG_AUTOMATION_NAME)/.
+	cd $(PKG_AUTOMATION_NAME) && git checkout tags/$(PKG_AUTOMATION_TAG)
+	bash $(PKG_AUTOMATION_NAME)/pkg_automation.bash
 
 
 ## Initialize $(EPICS_BASE_NAME) with $(EPICS_BASE_TAG)
@@ -141,4 +150,4 @@ endif
 
 
 
-.PHONY: help env dirs init git-msync base-init build clean rebuild
+.PHONY: help env dirs init git-msync base-init build clean rebuild pkgs

@@ -1,0 +1,7 @@
+# (PKG) PKG_AUTOMATION_NAME
+
+export PKG_AUTOMATION_NAME:=pkg_automation
+
+# (PKG) PKG_AUTOMATION_TAG
+
+export PKG_AUTOMATION_TAG:=v1.0
