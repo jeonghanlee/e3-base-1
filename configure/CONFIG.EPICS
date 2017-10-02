@@ -15,7 +15,7 @@ export EPICS_BASE_NAME:=epics-base
 # The EPICS community tag number, which we would like to install
 # within ESS EPICS Environment (ESS)
 
-export EPICS_BASE_TAG:=R3.16.1
+export EPICS_BASE_TAG:=R3.15.4
 
 # (LOCAL) EPICS_BASE_SRC_PATH
 # Usually, it is the directory in $(TOP), after cloning the repository
