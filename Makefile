@@ -173,8 +173,8 @@ endif
 # EPICS $(TOP) is not the same as $(INSTALL_LOCATION) 
 startup:
 ifeq (,$(findstring $(EPICS_BASE_SRC_PATH),$(EEE_BASE_INSTALL_LOCATION)))
-	@install -d $(EEE_BASE_INSTALL_LOCATION)/startup
-	@install -m 664 $(EPICS_BASE)/startup/EpicsHostArch.pl $(EEE_BASE_INSTALL_LOCATION)/startup/
+	@sudo install -d -m 755 $(EEE_BASE_INSTALL_LOCATION)/startup
+	@sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl $(EEE_BASE_INSTALL_LOCATION)/startup/
 endif
 
 .PHONY: help env dirs init git-msync base-init build clean rebuild pkgs startup
