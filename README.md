@@ -8,6 +8,9 @@ This is the pilot project to build the EPICS BASE(s) in order to build the ESS E
 * Debian 8
 * CentOS 7
 
+## Assumption
+
+* Define
 
 ## Procedure
 
