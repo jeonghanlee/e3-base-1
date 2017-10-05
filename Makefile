@@ -121,10 +121,10 @@ $(E3_ENV_NAME): git-submodule-sync
 
 #
 ## Clean installed EPICS BASE(s) according to  $(DEFAULT_EPICS_VERSIONS)
-clean:
-	@for subdir in $(BASE_INSTALL_LOCATIONS) ; do \
-	     sudo rm -rf $$subdir ; \
-	done
+clean: $(BASE_INSTALL_LOCATIONS)
+
+$(BASE_INSTALL_LOCATIONS):
+	sudo rm -rf $@
 
 #
 ## Build EPICS BASE(s) according to $(DEFAULT_EPICS_VERSIONS)
@@ -136,14 +136,14 @@ $(DEFAULT_EPICS_VERSIONS):
 	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" \
 	-D_EPICS_SITE_VERSION="EEE-$@" -D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" \
 	$(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
-	@install -m 664 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
+	@$(INSTALL_DATA) $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
-	@install -m 664 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
+	@$(INSTALL_DATA) $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
 	sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
 	@echo "This is the temporary solution for startup dir"
-	@sudo install -d -m 755 "$(EPICS_LOCATION)/base-$@"/startup
-	@sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
+	@sudo $(INSTALL) -d -m 755 "$(EPICS_LOCATION)/base-$@"/startup
+	@sudo $(INSTALL) -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
 
 
-.PHONY: help env git-submodule-sync build clean init
+.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init
