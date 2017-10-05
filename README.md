@@ -1,6 +1,6 @@
-# eee-base
+# E3-BASE
 
-This is the pilot project to build the EPICS BASE(s) in order to build the ESS EPICS Environment (aka EEE). However, it will be used to build a generic EPICS base also.
+This is the pilot project to build the EPICS BASE(s) in order to build the ESS EPICS Environment (aka E3). However, it can be used to build a generic EPICS base also. 
 
 
 ## Tested Platform
@@ -8,72 +8,115 @@ This is the pilot project to build the EPICS BASE(s) in order to build the ESS E
 * Debian 8
 * CentOS 7
 
-## Assumption
-
-* Define
-
 ## Procedure
 
-* Edit configure/CONFIG.{EPICS,LOCAL}
-* make pkgs (if one needs to install required pgks)
-* make init
-* make build or sudo -E make build (in case EEE_BASES_PATH in a location, where root can access)
 
-
-## If CONFIG is changed
-* make init     (Set EPICS BASE_TAG properly)
-* make prepare  (Set EEE_BASE_VERISON properly)
-* make build
-
-
-## One wants to install EPICS base 3.15.5 and 3.16.1
-
-* set
-```
-EPICS_BASE_TAG:=R3.15.5
-EEE_BASE_VERSION=3.15.5
-```
-in configure/CONFIG
 ```
 $ make init
-$ make prepare
-$ make build or sudo -E make build
 ```
 
-* set
+Print pre-defined environments
 ```
-EPICS_BASE_TAG:=R3.16.1
-EEE_BASE_VERSION=3.16.1
+$ make env
 ```
-in configure/CONFIG
+
+Modify e3-env/e3-env file for
+* EPICS_BASE_TAGS
+* CROSS_COMPILER_TARGET_ARCHS
+* EPICS Installation Location : (should be in / directory, the makefile and other commands are optimized with this working model)
+
 ```
-$ make init
-$ make prepare
-$ make build or sudo -E make build
+$ make env
+```
+
+If one needs to install any required pkgs, please do
+```
+$ make pkg_automation
+```
+Currently, please execute twice with CentOS.
+
+Build and Install EPICS BASE(s). Note that SUDO permission is needed.
+
+```
+$ make build
+```
+
+## Cross compilier should be ready
+```
+$ tree -L 1 /opt/fsl-qoriq/
+/opt/fsl-qoriq/
+├── [root     4.0K]  1.9
+├── [root     4.0K]  2.0
+└── [root        4]  current -> 2.0/
 ```
 
 
-Then, one can see the following in
+## Example
 
 ```
-jhlee@kaffee: eee$ tree -L 2 /eee/bases/
-/eee/bases/
-├── [root     4.0K]  base-3.15.5
-│   ├── [root     4.0K]  bin
-│   ├── [root     4.0K]  configure
-│   ├── [root     4.0K]  db
-│   ├── [root     4.0K]  dbd
-│   ├── [root     4.0K]  html
-│   ├── [root      12K]  include
-│   ├── [root     4.0K]  lib
-│   └── [root     4.0K]  templates
-└── [root     4.0K]  base-3.16.1
-    ├── [root     4.0K]  bin
-    ├── [root     4.0K]  configure
-    ├── [root     4.0K]  db
-    ├── [root     4.0K]  dbd
-    ├── [root     4.0K]  html
-    ├── [root      12K]  include
-    ├── [root     4.0K]  lib
-    └── [root     4.0K]  templates
+e3-base (master)$ make env
+
+EPICS_BASE                  : /home/jhlee/gitsrc/e3-base/epics-base
+EPICS_HOST_ARCH             : linux-x86_64
+EPICS_BASE_NAME             : epics-base
+CROSS_COMPILER_TARGET_ARCHS : linux-ppc64e6500
+
+----- >>>> EPICS BASE Information <<<< -----
+
+EPICS_BASE_TAG              : R3.15.4 R3.15.5 R3.16.1
+CROSS_COMPILER_TARGET_ARCHS : linux-ppc64e6500
+
+----- >>>> ESS EPICS Environment  <<<< -----
+
+EPICS_LOCATION              : /e3/bases
+EPICS_MODULES               : /e3/modules
+DEFAULT_EPICS_VERSIONS      : 3.15.4 3.15.5 3.16.1
+BASE_INSTALL_LOCATIONS      : /e3/bases/base-3.15.4 /e3/bases/base-3.15.5 /e3/bases/base-3.16.1
+REQUIRE_VERSION             : 2.5.3
+REQUIRE_PATH                : /e3/modules/require/2.5.3
+REQUIRE_TOOLS               : /e3/modules/require/2.5.3/tools
+REQUIRE_BIN                 : /e3/modules/require/2.5.3/bin
 ```
+
+
+```
+root@kaffee:/e3/bases# tree -L 2
+.
+├── base-3.15.4
+│   ├── bin
+│   ├── configure
+│   ├── db
+│   ├── dbd
+│   ├── html
+│   ├── include
+│   ├── lib
+│   ├── startup
+│   └── templates
+├── base-3.15.5
+│   ├── bin
+│   ├── configure
+│   ├── db
+│   ├── dbd
+│   ├── html
+│   ├── include
+│   ├── lib
+│   ├── startup
+│   └── templates
+└── base-3.16.1
+    ├── bin
+    ├── configure
+    ├── db
+    ├── dbd
+    ├── html
+    ├── include
+    ├── lib
+    ├── startup
+    └── templates
+	
+root@kaffee:/e3/bases# tree -L 1 base-3.15.5/bin/
+base-3.15.5/bin/
+├── linux-ppc64e6500
+└── linux-x86_64
+
+```
+
