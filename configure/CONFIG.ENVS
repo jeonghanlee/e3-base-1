@@ -1,0 +1,6 @@
+
+export E3_ENV_NAME:=e3-env
+
+export E3_ENV_TAG:=v0.1
+
+export E3_ENV_SRC_PATH:=$(E3_ENV_NAME)

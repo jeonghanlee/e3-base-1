@@ -6,3 +6,7 @@
 	path = pkg_automation
 	url = https://github.com/jeonghanlee/pkg_automation
 	ignore = all	
+[submodule "e3-env"]
+	path = e3-env
+	url = https://github.com/icshwi/e3-env
+	ignore = all
