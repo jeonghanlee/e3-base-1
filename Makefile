@@ -18,14 +18,18 @@
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
 # Date    : Thursday, October  5 22:23:33 CEST 2017
-# version : 0.1.0
+# version : 0.1.1
 
-TOP = $(CURDIR)
+TOP:=$(CURDIR)
 
 include $(TOP)/configure/CONFIG.EPICS
 include $(TOP)/configure/CONFIG.MODULES
 
 -include $(TOP)/$(E3_ENV_NAME)/$(E3_ENV_NAME)
+
+
+# In case, this variable is undefined
+CROSS_COMPILER_TARGET_ARCHS ?=
 
 define git_update =
 @git submodule deinit -f $@/
@@ -44,8 +48,13 @@ git submodule init $@/
 git submodule update --init --recursive $@/
 endef
 
-# In case, this variable is undefined
-CROSS_COMPILER_TARGET_ARCHS ?=
+ifndef VERBOSE
+  QUIET := @
+endif
+
+ifdef DEBUG_SHELL
+  SHELL = /bin/sh -x
+endif
 
 
 # help is defined in 
@@ -54,7 +63,7 @@ help:
 	$(info --------------------------------------- )	
 	$(info Available targets)
 	$(info --------------------------------------- )
-	@awk '/^[a-zA-Z\-\_0-9]+:/ {                    \
+	$(QUIET) awk '/^[a-zA-Z\-\_0-9]+:/ {            \
 	  nb = sub( /^## /, "", helpMsg );              \
 	  if(nb == 0) {                                 \
 	    helpMsg = $$0;                              \
@@ -72,41 +81,43 @@ default: help
 
 ## Print and Reload ENV variables
 env:
-	@echo ""
-	@echo "EPICS_BASE                  : "$(EPICS_BASE)
-	@echo "EPICS_HOST_ARCH             : "$(EPICS_HOST_ARCH)
-	@echo "EPICS_BASE_NAME             : "$(EPICS_BASE_NAME)
-	@echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
-	@echo ""
-	@echo "----- >>>> EPICS BASE Information <<<< -----"
-	@echo ""
-	@echo "EPICS_BASE_TAG              : "$(EPICS_BASE_TAG)
-	@echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
-	@echo ""
-	@echo "----- >>>> ESS EPICS Environment  <<<< -----"
-	@echo ""
-	@echo "EPICS_LOCATION              : "$(EPICS_LOCATION)
-	@echo "EPICS_MODULES               : "$(EPICS_MODULES)
-	@echo "DEFAULT_EPICS_VERSIONS      : "$(DEFAULT_EPICS_VERSIONS)
-	@echo "BASE_INSTALL_LOCATIONS      : "$(BASE_INSTALL_LOCATIONS)
-	@echo "REQUIRE_VERSION             : "$(REQUIRE_VERSION)
-	@echo "REQUIRE_PATH                : "$(REQUIRE_PATH)
-	@echo "REQUIRE_TOOLS               : "$(REQUIRE_TOOLS)
-	@echo "REQUIRE_BIN                 : "$(REQUIRE_BIN)
-	@echo ""
+	$(QUIET) echo ""
+	$(QUIET) echo "EPICS_BASE                  : "$(EPICS_BASE)
+	$(QUIET) echo "EPICS_HOST_ARCH             : "$(EPICS_HOST_ARCH)
+	$(QUIET) echo "EPICS_BASE_NAME             : "$(EPICS_BASE_NAME)
+	$(QUIET) echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
+	$(QUIET) echo ""
+	$(QUIET) echo "----- >>>> EPICS BASE Information <<<< -----"
+	$(QUIET) echo ""
+	$(QUIET) echo "EPICS_BASE_TAG              : "$(EPICS_BASE_TAG)
+	$(QUIET) echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
+	$(QUIET) echo ""
+	$(QUIET) echo "----- >>>> ESS EPICS Environment  <<<< -----"
+	$(QUIET) echo ""
+	$(QUIET) echo "EPICS_LOCATION              : "$(EPICS_LOCATION)
+	$(QUIET) echo "EPICS_MODULES               : "$(EPICS_MODULES)
+	$(QUIET) echo "DEFAULT_EPICS_VERSIONS      : "$(DEFAULT_EPICS_VERSIONS)
+	$(QUIET) echo "BASE_INSTALL_LOCATIONS      : "$(BASE_INSTALL_LOCATIONS)
+	$(QUIET) echo "REQUIRE_VERSION             : "$(REQUIRE_VERSION)
+	$(QUIET) echo "REQUIRE_PATH                : "$(REQUIRE_PATH)
+	$(QUIET) echo "REQUIRE_TOOLS               : "$(REQUIRE_TOOLS)
+	$(QUIET) echo "REQUIRE_BIN                 : "$(REQUIRE_BIN)
+	$(QUIET) echo ""
 
 
 git-submodule-sync:
-	@git submodule sync
+	$(QUIET) git submodule sync
 
 #
 ## Initialize EPICS BASE and E3 ENVIRONMENT Module
 init: git-submodule-sync $(EPICS_BASE_NAME) $(E3_ENV_NAME)
 
 #
-# 
+#
+pkgs: $(PKG_AUTOMATION_NAME)
+
 $(PKG_AUTOMATION_NAME): git-submodule-sync
-	@$(git_update)
+	$(QUIET)$(git_update)
 	bash $@/pkg_automation.bash
 
 # EPICS Base doesn't have MASTER branch,
@@ -124,26 +135,25 @@ $(E3_ENV_NAME): git-submodule-sync
 clean: $(BASE_INSTALL_LOCATIONS)
 
 $(BASE_INSTALL_LOCATIONS):
-	sudo rm -rf $@
+	$(QUIET) sudo rm -rf $@
 
 #
 ## Build EPICS BASE(s) according to $(DEFAULT_EPICS_VERSIONS)
 build: $(DEFAULT_EPICS_VERSIONS)
 
 $(DEFAULT_EPICS_VERSIONS): 
-	@echo $@;
-	@cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * && git checkout tags/R$@
-	@m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" \
+	$(QUIET) echo $@;
+	$(QUIET) cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * && git checkout tags/R$@
+	$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" \
 	-D_EPICS_SITE_VERSION="EEE-$@" -D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" \
 	$(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
-	@$(INSTALL_DATA) $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
+	$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
-	@$(INSTALL_DATA) $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
-	sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
-	@echo "This is the temporary solution for startup dir"
-	@sudo $(INSTALL) -d -m 755 "$(EPICS_LOCATION)/base-$@"/startup
-	@sudo $(INSTALL) -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
+	$(QUIET) sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
+	$(QUIET) sudo install -m 755 -d "$(EPICS_LOCATION)/base-$@"/startup
+	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
 
 
-.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init
+.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_NAME)  $(E3_ENV_NAME)
