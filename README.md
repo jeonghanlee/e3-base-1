@@ -31,7 +31,7 @@ $ make env
 
 If one needs to install any required pkgs, please do
 ```
-$ make pkg_automation
+$ make pkgs
 ```
 Currently, please execute twice with CentOS.
 
