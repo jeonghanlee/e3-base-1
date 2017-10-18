@@ -17,8 +17,8 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Thursday, October  5 22:23:33 CEST 2017
-# version : 0.1.1
+# Date    : Wednesday, October 18 21:12:34 CEST 2017
+# version : 0.1.2
 
 TOP:=$(CURDIR)
 
@@ -124,11 +124,11 @@ $(PKG_AUTOMATION_NAME): git-submodule-sync
 # 3.16 branch is selected for a 'virtual' master
 #
 $(EPICS_BASE_NAME): git-submodule-sync
-	$(git_base_update)
+	$(QUIET) $(git_base_update)
 	cd $@ && git checkout 3.16
 
 $(E3_ENV_NAME): git-submodule-sync
-	$(git_update)
+	$(QUIET) $(git_update)
 
 #
 ## Clean installed EPICS BASE(s) according to  $(DEFAULT_EPICS_VERSIONS)
