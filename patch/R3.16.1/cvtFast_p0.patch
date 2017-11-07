@@ -1,0 +1,13 @@
+diff --git src/libCom/cvtFast/cvtFast.c src/libCom/cvtFast/cvtFast.c
+index 4e04b45..106c1ba 100644
+--- src/libCom/cvtFast/cvtFast.c
++++ src/libCom/cvtFast/cvtFast.c
+@@ -457,7 +457,7 @@ size_t
+ }
+ 
+ size_t
+-    cvtInt32OctalString(epicsInt32 val, char *pdest)
++    cvtInt32ToOctalString(epicsInt32 val, char *pdest)
+ {
+     if (val == 0) {
+         *pdest++ = '0';

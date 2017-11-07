@@ -17,8 +17,8 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Wednesday, October 18 21:12:34 CEST 2017
-# version : 0.1.2
+# Date    : Tuesday, November  7 14:20:00 CET 2017
+# version : 0.1.3
 
 TOP:=$(CURDIR)
 
@@ -48,6 +48,26 @@ git submodule init $@/
 git submodule update --init --recursive $@/
 endef
 
+define set_base
+$(QUIET) cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * && git checkout tags/R$@
+endef
+
+define site_base
+$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@" \
+-D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" $(TOP)/configure/config_site.m4 \
+> $(EPICS_BASE)/configure/CONFIG_SITE;
+$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/;
+endef
+
+
+define patch_base
+for i in $(wildcard $(TOP)/patch/R$@/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(EPICS_BASE_SRC_PATH)" "$@" "$$i"; \
+	patch -d $(EPICS_BASE_SRC_PATH) -p0 < $$i;\
+done
+endef
+
+
 ifndef VERBOSE
   QUIET := @
 endif
@@ -55,6 +75,8 @@ endif
 ifdef DEBUG_SHELL
   SHELL = /bin/sh -x
 endif
+
+
 
 
 # help is defined in 
@@ -141,19 +163,18 @@ $(BASE_INSTALL_LOCATIONS):
 ## Build EPICS BASE(s) according to $(DEFAULT_EPICS_VERSIONS)
 build: $(DEFAULT_EPICS_VERSIONS)
 
+
 $(DEFAULT_EPICS_VERSIONS): 
 	$(QUIET) echo $@;
-	$(QUIET) cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * && git checkout tags/R$@
-	$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" \
-	-D_EPICS_SITE_VERSION="EEE-$@" -D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" \
-	$(TOP)/configure/config_site.m4  > $(EPICS_BASE)/configure/CONFIG_SITE
-	$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
+	$(QUIET) $(set_base)
+	$(QUIET) $(site_base)
 ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
 	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
+	$(QUIET) $(patch_base)
 	$(QUIET) sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
 	$(QUIET) sudo install -m 755 -d "$(EPICS_LOCATION)/base-$@"/startup
 	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
 
 
-.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_NAME)  $(E3_ENV_NAME)
+.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_NAME)  $(E3_ENV_NAME) 

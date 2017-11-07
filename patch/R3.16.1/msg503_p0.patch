@@ -1,0 +1,58 @@
+Author: Andrew Johnson <anj@aps.anl.gov>
+Date:   Thu Sep 7 13:48:39 2017 -0500
+
+    Add dummy putValue methods to const link types
+    
+    Resolves http://www.aps.anl.gov/epics/core-talk/2017/msg00503.php
+
+diff --git src/ioc/db/dbConstLink.c src/ioc/db/dbConstLink.c
+index ffedce4..928dae9 100644
+--- src/ioc/db/dbConstLink.c
++++ src/ioc/db/dbConstLink.c
+@@ -211,6 +211,12 @@ static long dbConstGetValue(struct link *plink, short dbrType, void *pbuffer,
+     return 0;
+ }
+ 
++static long dbConstPutValue(struct link *plink, short dbrType,
++            const void *pbuffer, long nRequest)
++{
++    return 0;
++}
++
+ static lset dbConst_lset = {
+     1, 0, /* Constant, not Volatile */
+     NULL, NULL,
+@@ -223,6 +229,6 @@ static lset dbConst_lset = {
+     NULL, NULL, NULL,
+     NULL, NULL,
+     NULL, NULL,
+-    NULL, NULL,
++    dbConstPutValue, NULL,
+     NULL, NULL
+ };
+diff --git src/std/link/lnkConst.c src/std/link/lnkConst.c
+index db824ab..6a3dc5d 100644
+--- src/std/link/lnkConst.c
++++ src/std/link/lnkConst.c
+@@ -558,6 +558,12 @@ static long lnkConst_getValue(struct link *plink, short dbrType, void *pbuffer,
+     return 0;
+ }
+ 
++static long lnkConst_putValue(struct link *plink, short dbrType,
++            const void *pbuffer, long nRequest)
++{
++    return 0;
++}
++
+ 
+ /************************* Interface Tables *************************/
+ 
+@@ -569,7 +575,7 @@ static lset lnkConst_lset = {
+     NULL, NULL, NULL,
+     NULL, NULL,
+     NULL, NULL,
+-    NULL, NULL,
++    lnkConst_putValue, NULL,
+     NULL, NULL
+ };
+ 
