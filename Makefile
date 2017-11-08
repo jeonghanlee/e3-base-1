@@ -17,8 +17,8 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Tuesday, November  7 14:20:00 CET 2017
-# version : 0.1.3
+# Date    : Wednesday, November  8 09:43:40 CET 2017
+# version : 0.1.4
 
 TOP:=$(CURDIR)
 
@@ -53,7 +53,7 @@ $(QUIET) cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * &&
 endef
 
 define site_base
-$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@" \
+$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@-patch" \
 -D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" $(TOP)/configure/config_site.m4 \
 > $(EPICS_BASE)/configure/CONFIG_SITE;
 $(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/;

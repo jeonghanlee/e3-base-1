@@ -120,3 +120,13 @@ base-3.15.5/bin/
 
 ```
 
+## Site Configuration
+We have the following information in CONFIG_SITE_ENV
+
+```
+EPICS_TIMEZONE = CET/CEST::-60:032602:102902
+EPICS_TS_NTP_INET=mmo1.ntp.se
+IOCSH_PS1="e3> "
+IOCSH_HISTSIZE=100
+EPICS_IOC_LOG_FILE_LIMIT=1000000
+```

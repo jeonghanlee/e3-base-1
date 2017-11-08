@@ -88,8 +88,8 @@ EPICS_TS_NTP_INET=mmo1.ntp.se
 #	Prompt string
 # IOCSH_HISTSIZE
 #	Number of lines of command history to keep.
-IOCSH_PS1="eee> "
-IOCSH_HISTSIZE=50
+IOCSH_PS1="e3> "
+IOCSH_HISTSIZE=100
 
 # Log Server:
 # EPICS_IOC_LOG_INET 
