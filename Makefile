@@ -25,8 +25,8 @@ TOP:=$(CURDIR)
 include $(TOP)/configure/CONFIG.EPICS
 include $(TOP)/configure/CONFIG.MODULES
 
--include $(TOP)/$(E3_ENV_NAME)/$(E3_ENV_NAME)
-
+#-include $(TOP)/$(E3_ENV_NAME)/$(E3_ENV_NAME)
+-include $(TOP)/$(E3_ENV_NAME)/e3-global-env
 
 # In case, this variable is undefined
 CROSS_COMPILER_TARGET_ARCHS ?=
@@ -36,7 +36,7 @@ define git_update =
 git submodule deinit -f $@/
 sed -i '/submodule/,$$d'  $(TOP)/.git/config	
 git submodule init $@/
-git submodule update --init --recursive $@/
+git submodule update --init --recursive --recursive $@/
 git submodule update --remote --merge $@/
 endef
 
@@ -54,7 +54,7 @@ endef
 
 define site_base
 $(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@-patch" \
--D_INSTALL_LOCATION="$(EPICS_LOCATION)/base-$@" $(TOP)/configure/config_site.m4 \
+-D_INSTALL_LOCATION="$(ESS_EPICS_PATH)/base-$@" $(TOP)/configure/config_site.m4 \
 > $(EPICS_BASE)/configure/CONFIG_SITE;
 $(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/;
 endef
@@ -104,26 +104,22 @@ default: help
 ## Print and Reload ENV variables
 env:
 	$(QUIET) echo ""
+
+	$(QUIET) echo "----- >>>> EPICS BASE Information <<<< -----"
+	$(QUIET) echo ""
 	$(QUIET) echo "EPICS_BASE                  : "$(EPICS_BASE)
+	$(QUIET) echo "EPICS_BASE_TAG              : "$(EPICS_BASE_TAG)
 	$(QUIET) echo "EPICS_HOST_ARCH             : "$(EPICS_HOST_ARCH)
 	$(QUIET) echo "EPICS_BASE_NAME             : "$(EPICS_BASE_NAME)
 	$(QUIET) echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
 	$(QUIET) echo ""
-	$(QUIET) echo "----- >>>> EPICS BASE Information <<<< -----"
-	$(QUIET) echo ""
-	$(QUIET) echo "EPICS_BASE_TAG              : "$(EPICS_BASE_TAG)
-	$(QUIET) echo "CROSS_COMPILER_TARGET_ARCHS : "$(CROSS_COMPILER_TARGET_ARCHS)
 	$(QUIET) echo ""
 	$(QUIET) echo "----- >>>> ESS EPICS Environment  <<<< -----"
 	$(QUIET) echo ""
-	$(QUIET) echo "EPICS_LOCATION              : "$(EPICS_LOCATION)
-	$(QUIET) echo "EPICS_MODULES               : "$(EPICS_MODULES)
+
+	$(QUIET) echo "ESS_EPICS_PATH              : "$(ESS_EPICS_PATH)
 	$(QUIET) echo "DEFAULT_EPICS_VERSIONS      : "$(DEFAULT_EPICS_VERSIONS)
 	$(QUIET) echo "BASE_INSTALL_LOCATIONS      : "$(BASE_INSTALL_LOCATIONS)
-	$(QUIET) echo "REQUIRE_VERSION             : "$(REQUIRE_VERSION)
-	$(QUIET) echo "REQUIRE_PATH                : "$(REQUIRE_PATH)
-	$(QUIET) echo "REQUIRE_TOOLS               : "$(REQUIRE_TOOLS)
-	$(QUIET) echo "REQUIRE_BIN                 : "$(REQUIRE_BIN)
 	$(QUIET) echo ""
 
 
@@ -132,7 +128,7 @@ git-submodule-sync:
 
 #
 ## Initialize EPICS BASE and E3 ENVIRONMENT Module
-init: git-submodule-sync $(EPICS_BASE_NAME) $(E3_ENV_NAME)
+init: git-submodule-sync $(EPICS_BASE_SRC_PATH) $(E3_ENV_NAME)
 
 #
 #
@@ -145,12 +141,13 @@ $(PKG_AUTOMATION_NAME): git-submodule-sync
 # EPICS Base doesn't have MASTER branch,
 # 3.16 branch is selected for a 'virtual' master
 #
-$(EPICS_BASE_NAME): git-submodule-sync
+$(EPICS_BASE_SRC_PATH): git-submodule-sync
 	$(QUIET) $(git_base_update)
 	cd $@ && git checkout 3.16
 
 $(E3_ENV_NAME): git-submodule-sync
 	$(QUIET) $(git_update)
+	cd $@ && git checkout $(E3_ENV_TAG)
 
 #
 ## Clean installed EPICS BASE(s) according to  $(DEFAULT_EPICS_VERSIONS)
@@ -173,8 +170,8 @@ ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
 endif
 	$(QUIET) $(patch_base)
 	$(QUIET) sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
-	$(QUIET) sudo install -m 755 -d "$(EPICS_LOCATION)/base-$@"/startup
-	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
+	$(QUIET) sudo install -m 755 -d "$(ESS_EPICS_PATH)/base-$@"/startup
+	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(ESS_EPICS_PATH)/base-$@"/startup/
 
 
-.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_NAME)  $(E3_ENV_NAME) 
+.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_SRC_PATH)  $(E3_ENV_NAME) 

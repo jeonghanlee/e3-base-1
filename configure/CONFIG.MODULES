@@ -5,5 +5,5 @@ export PKG_AUTOMATION_TAG:=v1.1
 
 # E3_ENV_NAME
 export E3_ENV_NAME:=e3-env
-#export E3_ENV_TAG:=v0.1
+export E3_ENV_TAG:=target_path_test
 
