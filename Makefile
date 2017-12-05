@@ -117,9 +117,9 @@ env:
 	$(QUIET) echo "----- >>>> ESS EPICS Environment  <<<< -----"
 	$(QUIET) echo ""
 
-	$(QUIET) echo "ESS_EPICS_PATH              : "$(ESS_EPICS_PATH)
-	$(QUIET) echo "DEFAULT_EPICS_VERSIONS      : "$(DEFAULT_EPICS_VERSIONS)
-	$(QUIET) echo "BASE_INSTALL_LOCATIONS      : "$(BASE_INSTALL_LOCATIONS)
+	$(QUIET) echo "ESS_EPICS_PATH             : "$(ESS_EPICS_PATH)
+	$(QUIET) echo "DEFAULT_EPICS_VERSION      : "$(DEFAULT_EPICS_VERSION)
+	$(QUIET) echo "BASE_INSTALL_LOCATION      : "$(BASE_INSTALL_LOCATION)
 	$(QUIET) echo ""
 
 
@@ -151,14 +151,14 @@ $(E3_ENV_NAME): git-submodule-sync
 
 #
 ## Clean installed EPICS BASE(s) according to  $(DEFAULT_EPICS_VERSIONS)
-clean: $(BASE_INSTALL_LOCATIONS)
+clean: $(BASE_INSTALL_LOCATION)
 
 $(BASE_INSTALL_LOCATIONS):
 	$(QUIET) sudo rm -rf $@
 
 #
-## Build EPICS BASE(s) according to $(DEFAULT_EPICS_VERSIONS)
-build: $(DEFAULT_EPICS_VERSIONS)
+## Build EPICS BASE(s) according to $(DEFAULT_EPICS_VERSION)
+build: $(DEFAULT_EPICS_VERSION)
 
 
 $(DEFAULT_EPICS_VERSIONS): 
