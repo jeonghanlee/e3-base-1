@@ -161,7 +161,7 @@ $(BASE_INSTALL_LOCATIONS):
 build: $(DEFAULT_EPICS_VERSION)
 
 
-$(DEFAULT_EPICS_VERSIONS): 
+$(DEFAULT_EPICS_VERSION): 
 	$(QUIET) echo $@;
 	$(QUIET) $(set_base)
 	$(QUIET) $(site_base)
@@ -174,4 +174,4 @@ endif
 	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(ESS_EPICS_PATH)/base-$@"/startup/
 
 
-.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSIONS) clean $(BASE_INSTALL_LOCATIONS) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_SRC_PATH)  $(E3_ENV_NAME) 
+.PHONY: help env git-submodule-sync build $(DEFAULT_EPICS_VERSION) clean $(BASE_INSTALL_LOCATION) init $(PKG_AUTOMATION_NAME) $(EPICS_BASE_SRC_PATH)  $(E3_ENV_NAME) 
