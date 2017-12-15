@@ -24,9 +24,8 @@ TOP:=$(CURDIR)
 
 include $(TOP)/configure/CONFIG.EPICS
 include $(TOP)/configure/CONFIG.MODULES
+include $(TOP)/configure/E3_ENV_CONF
 
-#-include $(TOP)/$(E3_ENV_NAME)/$(E3_ENV_NAME)
--include $(TOP)/$(E3_ENV_NAME)/e3-global-env
 
 # In case, this variable is undefined
 CROSS_COMPILER_TARGET_ARCHS ?=
