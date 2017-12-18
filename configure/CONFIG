@@ -1,12 +1,9 @@
 
 
+
 VARS_EXCLUDES := $(.VARIABLES)
 
-ifneq (,$(findstring dev,$(MAKECMDGOALS)))
-include $(TOP)/configure/RELEASE_DEV
-else
-include $(TOP)/configure/RELEASE
-endif
+include $(TOP)/configure/CONFIG_UNEXPORT
 
 
 ifneq (,$(findstring dev,$(MAKECMDGOALS)))
@@ -17,15 +14,17 @@ endif
 
 include $(TOP)/configure/CONFIG_PKG
 
+
 # IF BASE_INSTALL_LOCATION is not WRITABLE, SUDO and SUDOBASH should be used 
 # SUDO_INFO 1 : SUDO is needed (NOT writable)
 # SUDO_INFO 0 : SUDO is not needed
-SUDO_INFO := $(shell test -w $(E3_BASE_INSTALL_LOCATION) 1>&2 2> /dev/null; echo $$?)
+SUDO_INFO := $(shell mkdir -p $(E3_BASE_INSTALL_LOCATION) && test -w $(E3_BASE_INSTALL_LOCATION) 1>&2 2> /dev/null; echo $$?)
 
 ifeq "$(SUDO_INFO)" "1"
 SUDO := sudo
-SUDOBASH = $(SUDO)
-SUDOBASH += -E
+SUDOE = $(SUDO)
+SUDIE += -E
+SUDOBASH = $(SUDOE)
 SUDOBASH += bash -c
 endif    
 
@@ -39,3 +38,4 @@ E3_BASE_SRC_PATH_INFO := $(shell test -d $(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; 
 ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
 INIT_E3_BASE_SRC = 1
 endif
+

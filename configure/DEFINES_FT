@@ -1,9 +1,8 @@
 
 # In case, this variable is undefined
-CROSS_COMPILER_TARGET_ARCHS ?=
+E3_CROSS_COMPILER_TARGET_ARCHS ?=
 
 define git_update =
-@git submodule deinit -f $@/
 git submodule deinit -f $@/
 sed -i '/submodule/,$$d'  $(TOP)/.git/config	
 git submodule init $@/
@@ -11,33 +10,35 @@ git submodule update --init --recursive --recursive $@/
 git submodule update --remote --merge $@/
 endef
 
+
 define git_base_update =
-@git submodule deinit -f $@/
 git submodule deinit -f $@/
 sed -i '/submodule/,$$d'  $(TOP)/.git/config	
 git submodule init $@/
 git submodule update --init --recursive $@/
 endef
 
-define set_base
-$(QUIET) cd $(EPICS_BASE_SRC_PATH) && sudo -E make clean && git checkout -- * && git checkout tags/R$@
-endef
-
 define site_base
-$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@-patch" \
--D_INSTALL_LOCATION="$(ESS_EPICS_PATH)/base-$@" $(TOP)/configure/config_site.m4 \
-> $(EPICS_BASE)/configure/CONFIG_SITE;
-$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/;
+$(QUIET) m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(E3_CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="EEE-$@-patch" \
+-D_INSTALL_LOCATION="$(E3_BASE_INSTALL_LOCATION)" $(TOP)/configure/config_site.m4 \
+> $(EPICS_BASE)/configure/CONFIG_SITE
+$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
 endef
-
 
 define patch_base
-for i in $(wildcard $(TOP)/patch/R$@/*p0.patch); do\
-	printf "\nPatching %s %s with the file : %s\n" "$(EPICS_BASE_SRC_PATH)" "$@" "$$i"; \
-	patch -d $(EPICS_BASE_SRC_PATH) -p0 < $$i;\
+for i in $(wildcard $(TOP)/patch/R$1/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
 done
 endef
 
+define patch_revert_base
+for i in $(wildcard $(TOP)/patch/R$1/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -R -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+done
+
+endef
 
 ifndef VERBOSE
   QUIET := @
@@ -58,6 +59,7 @@ VARS_EXCLUDES+=git_base_update
 VARS_EXCLUDES+=set_base
 VARS_EXCLUDES+=site_base
 VARS_EXCLUDES+=patch_base
+VARS_EXCLUDES+=patch_revert_base
 VARS_EXCLUDES+=QUIET
 VARS_EXCLUDES+=SHELL
 

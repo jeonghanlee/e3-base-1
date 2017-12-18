@@ -1,0 +1,4 @@
+
+unexport EPICS_BASE
+unexport EPICS_HOST_ARCH
+

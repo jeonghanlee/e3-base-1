@@ -1,39 +1,45 @@
 # -*- mode: Makefile;-*-
 
-.PHONY: devvars devenv devinit devbuild devclean devinstall devrebuild devuninstall devdistclean
+.PHONY: devvars devenv devinit devclone
 
 devvars: vars
-
 devenv: devvars
 
-devinit: git-submodule-sync
-	git clone $(E3_MODULE_DEV_GITURL) $(E3_MODULE_SRC_PATH)
-	cd $(E3_MODULE_SRC_PATH) && git checkout $(EPICS_MODULE_TAG)
+devinit: git-submodule-sync devclone checkout
+
+devclone:
+	git clone --depth 1 --no-single-branch $(E3_BASE_DEV_GITURL) $(E3_BASE_SRC_PATH)
 
 
-ifeq "$(INIT_E3_MODULE_SRC)" "1"
+.PHONY: devbuild devpatch devpatchrevert devclean devuninstall devdistclean devpurge nonexists
+
+ifeq "$(INIT_E3_BASE_SRC)" "1"
 
 devbuild: nonexists
+devpatch: nonexists
+devpatchrevert: nonexists
 devclean: nonexists
-devinstall: nonexists
-devrebuild: nonexists
 devuninstall: nonexists
 devdistclean: nonexists
+devpurge: nonexists
 nonexists:
 	$(QUIET)echo ""
 	$(QUIET)echo "------------------------------------------------------------"
-	$(QUIET)echo "          Could not find $(E3_MODULE_SRC_PATH) "
+	$(QUIET)echo "          Could not find $(E3_BASE_SRC_PATH) "
 	$(QUIET)echo "          Please make devinit first !          "
 	$(QUIET)echo "------------------------------------------------------------"
 	$(QUIET)echo ""
+
 else
 
 devbuild: build
+devpatch: patch 
+devpatchrevert: patchrevert
 devclean: clean
-devinstall: install
-devrebuild: rebuild
 devuninstall: uninstall
-devdistclean: clean
-	$(QUIET)echo "Removing $(E3_MODULE_SRC_PATH) ......... "
-	rm -rf $(E3_MODULE_SRC_PATH)
+devdistclean: devpurge
+devpurge: distclean
+	$(QUIET)echo "Removing $(E3_BASE_SRC_PATH) ......... "
+	rm -rf $(E3_BASE_SRC_PATH)
+
 endif

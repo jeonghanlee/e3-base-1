@@ -1,8 +1,8 @@
 [submodule "epics-base"]
 	path = epics-base
 	url = https://github.com/epics-base/epics-base
-	ignore = dirty
+	ignore = all
 [submodule "pkg_automation"]
 	path = pkg_automation
 	url = https://github.com/jeonghanlee/pkg_automation
-	ignore = dirty	
+	ignore = dirty
