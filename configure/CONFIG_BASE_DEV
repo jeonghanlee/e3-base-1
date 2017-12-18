@@ -1,0 +1,18 @@
+
+E3_BASE_SRC_PATH:=$(EPICS_BASE_NAME)-dev
+E3_BASE_VERSION:=$(EPICS_BASE_TAG:R%=%)
+
+# (EPICS) EPICS_BASE (WILL BE USED in the EPICS BUILDING SYSTEM)
+EPICS_BASE:=$(TOP)/$(E3_BASE_SRC_PATH)
+EPICS_HOST_ARCH:=$(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
+
+
+E3_BASE_INSTALL_LOCATION=$(addprefix $(E3_EPICS_PATH)/base-,$(E3_BASE_VERSION))
+
+
+export EPICS_BASE
+export EPICS_HOST_ARCH
+export CROSS_COMPILER_TARGET_ARCHS
+
+
+E3_BASE_DEV_GITURL:="https://github.com/epics-base/epics-base"

@@ -18,24 +18,24 @@ export CROSS_COMPILER_TARGET_ARCHS
 
 
 
-## Global REQUIRE Enviornment
-## REQUIRE should override some of them
-## Please see e3-require/configure/BUILD_REQUIRE
-##
-##
-##
-# This is the REQUIRE module source tag
-# *) individual tags
-#    export EPICS_MODULE_TAG:=tags/require_2_5_3
-# *) master branch 
-#    export EPICS_MODULE_TAG:=master
-# *) individual hash
+# ## Global REQUIRE Enviornment
+# ## REQUIRE should override some of them
+# ## Please see e3-require/configure/BUILD_REQUIRE
+# ##
+# ##
+# ##
+# # This is the REQUIRE module source tag
+# # *) individual tags
+# #    export EPICS_MODULE_TAG:=tags/require_2_5_3
+# # *) master branch 
+# #    export EPICS_MODULE_TAG:=master
+# # *) individual hash
 
-REQUIRE_MODULE_TAG:=tags/v2.5.4
+# REQUIRE_MODULE_TAG:=tags/v2.5.4
 
-REQUIRE_INSTALL_LOCATION:=$(BASE_INSTALL_LOCATION)
-REQUIRE:=require
-REQUIRE_VERSION:=2.5.4
-REQUIRE_PATH:=$(addsuffix /$(REQUIRE)/$(REQUIRE_VERSION),$(REQUIRE_INSTALL_LOCATION))
-REQUIRE_TOOLS:=$(REQUIRE_PATH)/tools
-REQUIRE_BIN:=$(REQUIRE_PATH)/bin
+# REQUIRE_INSTALL_LOCATION:=$(BASE_INSTALL_LOCATION)
+# REQUIRE:=require
+# REQUIRE_VERSION:=2.5.4
+# REQUIRE_PATH:=$(addsuffix /$(REQUIRE)/$(REQUIRE_VERSION),$(REQUIRE_INSTALL_LOCATION))
+# REQUIRE_TOOLS:=$(REQUIRE_PATH)/tools
+# REQUIRE_BIN:=$(REQUIRE_PATH)/bin

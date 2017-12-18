@@ -1,0 +1,41 @@
+
+
+VARS_EXCLUDES := $(.VARIABLES)
+
+ifneq (,$(findstring dev,$(MAKECMDGOALS)))
+include $(TOP)/configure/RELEASE_DEV
+else
+include $(TOP)/configure/RELEASE
+endif
+
+
+ifneq (,$(findstring dev,$(MAKECMDGOALS)))
+include $(TOP)/configure/CONFIG_BASE_DEV
+else
+include $(TOP)/configure/CONFIG_BASE
+endif
+
+include $(TOP)/configure/CONFIG_PKG
+
+# IF BASE_INSTALL_LOCATION is not WRITABLE, SUDO and SUDOBASH should be used 
+# SUDO_INFO 1 : SUDO is needed (NOT writable)
+# SUDO_INFO 0 : SUDO is not needed
+SUDO_INFO := $(shell test -w $(E3_BASE_INSTALL_LOCATION) 1>&2 2> /dev/null; echo $$?)
+
+ifeq "$(SUDO_INFO)" "1"
+SUDO := sudo
+SUDOBASH = $(SUDO)
+SUDOBASH += -E
+SUDOBASH += bash -c
+endif    
+
+
+# Valid for only Development Mode, because we clone/remove them
+# See RULES_DEV
+# E3_BASE_SRC_PATH_INFO 1 : the directory is not there
+# E3_BASE_SRC_PATH_INFO 0 : the directory is there
+E3_BASE_SRC_PATH_INFO := $(shell test -d $(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
+
+ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
+INIT_E3_BASE_SRC = 1
+endif
