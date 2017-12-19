@@ -28,7 +28,7 @@ help:
 .PHONY: distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
 
 
-## Distclean the EPICS in  $(E3_BASE_SRC_PATH)
+## Distclean (Remove bin and lib) the EPICS in  $(E3_BASE_SRC_PATH)
 distclean:
 	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDOE) make distclean
 
