@@ -1,0 +1,45 @@
+# -*- mode: Makefile;-*-
+
+.PHONY: devvars devenv devinit devclone
+
+devvars: vars
+devenv: devvars
+
+devinit: git-submodule-sync devclone checkout
+
+devclone:
+	git clone --depth 1 --no-single-branch $(E3_BASE_DEV_GITURL) $(E3_BASE_SRC_PATH)
+
+
+.PHONY: devbuild devpatch devpatchrevert devclean devuninstall devdistclean devpurge nonexists
+
+ifeq "$(INIT_E3_BASE_SRC)" "1"
+
+devbuild: nonexists
+devpatch: nonexists
+devpatchrevert: nonexists
+devclean: nonexists
+devuninstall: nonexists
+devdistclean: nonexists
+devpurge: nonexists
+nonexists:
+	$(QUIET)echo ""
+	$(QUIET)echo "------------------------------------------------------------"
+	$(QUIET)echo "          Could not find $(E3_BASE_SRC_PATH) "
+	$(QUIET)echo "          Please make devinit first !          "
+	$(QUIET)echo "------------------------------------------------------------"
+	$(QUIET)echo ""
+
+else
+
+devbuild: build
+devpatch: patch 
+devpatchrevert: patchrevert
+devclean: clean
+devuninstall: uninstall
+devdistclean: devpurge
+devpurge: distclean
+	$(QUIET)echo "Removing $(E3_BASE_SRC_PATH) ......... "
+	rm -rf $(E3_BASE_SRC_PATH)
+
+endif

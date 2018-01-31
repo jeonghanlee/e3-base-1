@@ -1,9 +1,0 @@
-# PKG_AUTOMATION_NAME
-export PKG_AUTOMATION_NAME:=pkg_automation
-# PKG_AUTOMATION_TAG
-export PKG_AUTOMATION_TAG:=v1.1
-
-# E3_ENV_NAME
-export E3_ENV_NAME:=e3-env
-export E3_ENV_TAG:=target_path_test
-

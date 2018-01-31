@@ -1,0 +1,114 @@
+# -*- mode: Makefile;-*-
+
+.PHONY: help default 
+
+
+default: help
+
+
+# help is defined in 
+# https://gist.github.com/rcmachado/af3db315e31383502660
+help:
+	$(info --------------------------------------- )	
+	$(info Available targets)
+	$(info --------------------------------------- )
+	$(QUIET) awk '/^[a-zA-Z\-\_0-9]+:/ {            \
+	  nb = sub( /^## /, "", helpMsg );              \
+	  if(nb == 0) {                                 \
+	    helpMsg = $$0;                              \
+	    nb = sub( /^[^:]*:.* ## /, "", helpMsg );   \
+	  }                                             \
+	  if (nb)                                       \
+	    print  $$1 "\t" helpMsg;                    \
+	}                                               \
+	{ helpMsg = $$0 }'                              \
+	$(MAKEFILE_LIST) | column -ts:	
+
+
+.PHONY: distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
+
+
+## Distclean (Remove bin and lib) the EPICS in  $(E3_BASE_SRC_PATH)
+distclean:
+	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDOE) make distclean
+
+
+
+## Clean the EPICS in  $(E3_BASE_SRC_PATH)
+clean:
+	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDOE) make clean	
+
+
+## Uninstall the installed EPICS BASE according to  $(E3_BASE_INSTALL_LOCATION)
+uninstall: $(E3_BASE_INSTALL_LOCATION)
+
+
+$(E3_BASE_INSTALL_LOCATION):
+	$(QUIET) $(SUDO) rm -rf $@
+
+
+.PHONY: conf copystartup  $(E3_BASE_VERSION) build rebuild patch patchrevert
+
+
+rebuild: distclean init build
+
+
+## Build EPICS BASE(s) according to $(E3_BASE_VERSION)
+build: conf
+	$(QUIET) $(SUDOE) $(MAKE) -C $(E3_BASE_SRC_PATH)
+
+
+conf: $(E3_BASE_VERSION) copystartup 
+
+
+$(E3_BASE_VERSION):
+	$(QUIET) $(site_base)
+ifneq (,$(findstring linux-ppc64e6500,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
+endif
+
+
+copystartup:
+	$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
+	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch.pl $(E3_BASE_INSTALL_LOCATION_STARTUP)
+
+
+
+## Apply EPICS Patch Files 
+patch:
+	$(QUIET) $(call patch_base,$(E3_BASE_VERSION))
+
+## Revert EPICS Patch Files 
+patchrevert:
+	$(QUIET) $(call patch_revert_base,$(E3_BASE_VERSION))
+
+
+.PHONY: pkgs $(PKG_AUTOMATION_NAME)
+
+## Install Required Packages for E3
+pkgs: $(PKG_AUTOMATION_NAME)
+
+
+$(PKG_AUTOMATION_NAME): git-submodule-sync
+	$(QUIET)$(git_update)
+	bash $@/pkg_automation.bash
+
+.PHONY: init git-submodule-sync $(E3_BASE_SRC_PATH)  checkout
+
+
+## Initialize : $(E3_BASE_SRC_PATH) 
+init: git-submodule-sync $(E3_BASE_SRC_PATH)  checkout 
+
+
+git-submodule-sync:
+	$(QUIET) git submodule sync
+
+
+$(E3_BASE_SRC_PATH): 
+	$(QUIET) $(git_base_update)
+
+
+checkout: 
+	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
+
+
