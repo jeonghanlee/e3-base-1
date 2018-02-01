@@ -1,19 +1,10 @@
 # -*- mode: makefile; -*-
-# Include definitions common to all linux targets
-include $(CONFIG)/os/CONFIG.Common.linuxCommon
-
-ARCH_CLASS = ppc64
-
-ARCH_DEP_CFLAGS += -m64
-ARCH_DEP_CPPFLAGS += -D_ppc_64_
-ARCH_DEP_CXXFLAGS += -m64 
-ARCH_DEP_LDFLAGS += -m64
+include $(CONFIG)/os/CONFIG.Common.linux-ppc64
 
 
 TOOLCHAIN_VER=current
 TOOLCHAIN=fsl
 TOOLCHAIN_SUFFIX=-qoriq
-
 
 # TOOLCHAIN=
 # TOOLCHAIN_VER=
@@ -35,20 +26,27 @@ SDKTARGETSYSROOT=$(SYSROOTS)/ppc64e6500-$(TOOLCHAIN)-linux
 
 CROSS_INCLUDES =	
 
-ARCH_DEP_CFLAGS   += --sysroot=$(SDKTARGETSYSROOT)
-ARCH_DEP_CPPFLAGS += --sysroot=$(SDKTARGETSYSROOT)
-ARCH_DEP_CXXFLAGS += --sysroot=$(SDKTARGETSYSROOT)
-ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT)
+FSL_CFLAG = --sysroot=$(SDKTARGETSYSROOT) -mhard-float -mcpu=e6500
+
+#ARCH_DEP_CPPFLAGS += $(FSL_CFLAG)
+
+ARCH_DEP_CFLAGS   += $(FSL_CFLAG)
+ARCH_DEP_CXXFLAGS += $(FSL_CFLAG)
+ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT) 
+
+
+ARCH_DEP_CFLAGS   += -pipe -feliminate-unused-debug-types
+ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types
+ARCH_DEP_LDFLAGS  += -Wl,-O1
+ARCH_DEP_LDFLAGS  += -Wl,--hash-style=gnu
+ARCH_DEP_LDFLAGS  += -Wl,--as-needed
+
+
 
 # # ifeq ($(BUILD_CLASS),CROSS)
 # #   VALID_BUILDS = Ioc
 # # endif
 
-ARCH_DEP_CFLAGS   += -pipe -feliminate-unused-debug-types -mhard-float -mcpu=e6500
-ARCH_DEP_CPPFLAGS += -mhard-float -mcpu=e6500
-ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types -mhard-float -mcpu=e6500 
-ARCH_DEP_LDFLAGS  += 
-#-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed
 
 # OK to compile with gcc
 # powerpc64-poky-linux-g++ (GCC) 6.2.0
