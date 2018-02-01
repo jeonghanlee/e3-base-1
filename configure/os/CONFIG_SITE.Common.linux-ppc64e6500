@@ -6,6 +6,9 @@ TOOLCHAIN_VER=current
 TOOLCHAIN=fsl
 TOOLCHAIN_SUFFIX=-qoriq
 
+
+COMMANDLINE_LIBRARY = READLINE_NCURSES
+
 # TOOLCHAIN=
 # TOOLCHAIN_VER=
 # TOOLCHAIN_SUFFIX=
@@ -41,11 +44,6 @@ ARCH_DEP_LDFLAGS  += -Wl,-O1
 ARCH_DEP_LDFLAGS  += -Wl,--hash-style=gnu
 ARCH_DEP_LDFLAGS  += -Wl,--as-needed
 
-
-
-# # ifeq ($(BUILD_CLASS),CROSS)
-# #   VALID_BUILDS = Ioc
-# # endif
 
 
 # OK to compile with gcc
