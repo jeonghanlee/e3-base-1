@@ -17,8 +17,8 @@
 #
 # Author  : Jeong Han Lee
 # email   : han.lee@esss.se
-# Date    : Wednesday, November  8 09:43:40 CET 2017
-# version : 0.1.4
+# Date    : Sunday, February  4 21:28:08 CET 2018
+# version : 0.1.5
 
 TOP:=$(CURDIR)
 
@@ -66,6 +66,15 @@ for i in $(wildcard $(TOP)/patch/R$@/*p0.patch); do\
 	patch -d $(EPICS_BASE_SRC_PATH) -p0 < $$i;\
 done
 endef
+
+
+define patch_site
+for i in $(wildcard $(TOP)/patch/Site/R$@/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(EPICS_BASE_SRC_PATH)" "$@" "$$i"; \
+	patch -d $(EPICS_BASE_SRC_PATH) -p0 < $$i;\
+done
+endef
+
 
 
 ifndef VERBOSE
@@ -172,6 +181,7 @@ ifneq (,$(findstring linux-ppc64e6500,$(CROSS_COMPILER_TARGET_ARCHS)))
 	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
 	$(QUIET) $(patch_base)
+	$(QUIET) $(patch_site)
 	$(QUIET) sudo -E $(MAKE) -C $(EPICS_BASE_NAME)
 	$(QUIET) sudo install -m 755 -d "$(EPICS_LOCATION)/base-$@"/startup
 	$(QUIET) sudo install -m 755 $(EPICS_BASE)/startup/EpicsHostArch.pl "$(EPICS_LOCATION)/base-$@"/startup/
