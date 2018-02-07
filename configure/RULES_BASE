@@ -77,11 +77,12 @@ copystartup:
 ## Apply EPICS Patch Files 
 patch:
 	$(QUIET) $(call patch_base,$(E3_BASE_VERSION))
+	$(QUIET) $(call patch_site,$(E3_BASE_VERSION))
 
 ## Revert EPICS Patch Files 
 patchrevert:
 	$(QUIET) $(call patch_revert_base,$(E3_BASE_VERSION))
-
+	$(QUIET) $(call patch_revert_site,$(E3_BASE_VERSION))
 
 .PHONY: pkgs $(PKG_AUTOMATION_NAME)
 

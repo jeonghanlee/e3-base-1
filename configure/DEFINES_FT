@@ -40,6 +40,24 @@ done
 
 endef
 
+
+define patch_site
+for i in $(wildcard $(TOP)/patch/Site/R$1/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+done
+endef
+
+
+define patch_revert_site
+for i in $(wildcard $(TOP)/patch/Site/R$1/*p0.patch); do\
+	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -R -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+done
+
+endef
+
+
 ifndef VERBOSE
   QUIET := @
 endif
@@ -60,6 +78,8 @@ VARS_EXCLUDES+=set_base
 VARS_EXCLUDES+=site_base
 VARS_EXCLUDES+=patch_base
 VARS_EXCLUDES+=patch_revert_base
+VARS_EXCLUDES+=patch_site
+VARS_EXCLUDES+=patch_revert_site
 VARS_EXCLUDES+=QUIET
 VARS_EXCLUDES+=SHELL
 
