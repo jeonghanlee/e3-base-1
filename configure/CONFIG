@@ -39,3 +39,21 @@ ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
 INIT_E3_BASE_SRC = 1
 endif
 
+
+
+## This is the temporary solution in order to prevent users from CC errors even
+## if they don't have cc in their system
+
+ifeq "$(E3_CROSS_COMPILER_TARGET_ARCHS)" "linux-ppc64e6500"
+TOOLCHAIN_PATH=/opt/fsl-qoriq/current
+E3_CC_PATH_INFO := $(shell test -d $(TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
+# If cc is not setup, nullify E3_CROSS_COMPILER_TARGET_ARCHS
+ifeq "$(E3_CC_PATH_INFO)" "1"
+E3_CROSS_COMPILER_TARGET_ARCHS=
+endif
+endif
+
+
+### Exclude the following variables to display
+VARS_EXCLUDES+=TOOLCHAIN_PATH
+VARS_EXCLUDES+=E3_CC_PATH_INFO
