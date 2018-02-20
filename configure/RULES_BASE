@@ -1,4 +1,5 @@
 # -*- mode: Makefile;-*-
+.DEFAULT_GOAL := help
 
 .PHONY: help default 
 
