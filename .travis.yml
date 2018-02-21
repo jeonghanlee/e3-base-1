@@ -1,8 +1,11 @@
-sudo: false
+sudo: true
 dist: trusty
 language: c
 
-
+branches:
+    only:
+    - target_test_path
+    
 before_install:
   - sudo apt-get -qq update
   

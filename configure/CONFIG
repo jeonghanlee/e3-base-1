@@ -1,6 +1,5 @@
 
 
-
 VARS_EXCLUDES := $(.VARIABLES)
 
 include $(TOP)/configure/CONFIG_UNEXPORT
@@ -11,6 +10,9 @@ include $(TOP)/configure/CONFIG_BASE_DEV
 else
 include $(TOP)/configure/CONFIG_BASE
 endif
+
+-include $(TOP)/configure/CONFIG_CC.local
+
 
 include $(TOP)/configure/CONFIG_PKG
 

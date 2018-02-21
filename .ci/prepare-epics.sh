@@ -9,14 +9,13 @@ die() {
   exit 1
 }
 
+cat << EOF > configure/CONFIG_CC.local
+E3_CROSS_COMPILER_TARGET_ARCHS=
+EOF
 
-function checkout_e3_plus
-{
-    git checkout target_path_test
-}
 
-checkout_e3_plus
 make init
+
 bash pkg_automation.bash -y
 make env
 make patch
