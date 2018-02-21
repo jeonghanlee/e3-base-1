@@ -5,13 +5,11 @@ language: c
 # safelist
 branches:
   only:
-  - target_test_path
+  - target_path_test
     
 before_install:
   - sudo apt-get -qq update
   
-install:
- - ./.ci/prepare-epics.sh
+install: .ci/prepare-epics.sh
 
-script:
-- ./.ci/build-epics.sh
+script:  .ci/build-epics.sh
