@@ -9,14 +9,16 @@ die() {
   exit 1
 }
 
-cat << EOF > configure/CONFIG_CC.local
+
+
+cat  > configure/CONFIG_CC.local << EOF
 E3_CROSS_COMPILER_TARGET_ARCHS=
 EOF
 
 
 make init
 
-bash pkg_automation.bash -y
+bash pkg_automation/pkg_automation.bash -y
 make env
 make patch
 

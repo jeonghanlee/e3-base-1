@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 dist: trusty
 language: c
 
@@ -10,6 +10,8 @@ branches:
 before_install:
   - sudo apt-get -qq update
   
-install: .ci/prepare-epics.sh
+install:
+  - ./.ci/prepare-epics.sh
 
-script:  .ci/build-epics.sh
+script:
+  - ./.ci/build-epics.sh

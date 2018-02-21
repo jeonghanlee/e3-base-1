@@ -6,7 +6,7 @@ define git_update =
 git submodule deinit -f $@/
 sed -i '/submodule/,$$d'  $(TOP)/.git/config	
 git submodule init $@/
-git submodule update --init --recursive --recursive $@/
+git submodule update --init --recursive $@/
 git submodule update --remote --merge $@/
 endef
 
