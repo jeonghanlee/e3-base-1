@@ -1,4 +1,9 @@
-# E3-BASE
+EPICS Base for European Spallation Source ERIC
+=================
+
+[![Build Status](https://travis-ci.org/icshwi/e3-base.svg?branch=target_path_test)](https://travis-ci.org/icshwi/e3-base)
+
+# e3-base
 
 This is the pilot project to build the EPICS BASE(s) in order to build the ESS EPICS Environment (aka E3). However, it can be used to build a generic EPICS base also. 
 
