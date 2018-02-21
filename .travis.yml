@@ -1,0 +1,16 @@
+sudo: false
+dist: trusty
+language: c
+
+branches:
+    only:
+    - target_test_path
+    
+before_install:
+  - sudo apt-get -qq update
+  
+install:
+ - ./.ci/prepare-epics.sh
+
+script:
+- ./.ci/build-epics.sh
