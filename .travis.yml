@@ -2,9 +2,10 @@ sudo: false
 dist: trusty
 language: c
 
+# safelist
 branches:
-    only:
-    - target_test_path
+  only:
+  - target_test_path
     
 before_install:
   - sudo apt-get -qq update
