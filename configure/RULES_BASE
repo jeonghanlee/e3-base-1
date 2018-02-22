@@ -96,7 +96,7 @@ pkgs: $(PKG_AUTOMATION_NAME)
 
 
 ## Initialize : $(E3_BASE_SRC_PATH) 
-init:  checkout  $(E3_BASE_SRC_PATH)  $(PKG_AUTOMATION_NAME) git-submodule-sync 
+init: git-submodule-sync  $(E3_BASE_SRC_PATH)  $(PKG_AUTOMATION_NAME) checkout
 
 
 git-submodule-sync:
