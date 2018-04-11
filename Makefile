@@ -158,7 +158,7 @@ $(PKG_AUTOMATION_NAME): git-submodule-sync
 #
 $(EPICS_BASE_NAME): git-submodule-sync
 	$(QUIET) $(git_base_update)
-	cd $@ && git checkout 3.16
+#	cd $@ && git checkout 3.16
 
 $(E3_ENV_NAME): git-submodule-sync
 	$(QUIET) $(git_update)
