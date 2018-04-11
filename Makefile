@@ -149,7 +149,9 @@ pkgs: $(PKG_AUTOMATION_NAME)
 
 $(PKG_AUTOMATION_NAME): git-submodule-sync
 	$(QUIET)$(git_update)
-	bash $@/pkg_automation.bash
+	bash $@/pkg_automation.bash -y
+
+
 
 # EPICS Base doesn't have MASTER branch,
 # 3.16 branch is selected for a 'virtual' master
