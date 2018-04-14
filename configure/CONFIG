@@ -1,5 +1,4 @@
 
-
 VARS_EXCLUDES := $(.VARIABLES)
 
 include $(TOP)/configure/CONFIG_UNEXPORT
@@ -11,51 +10,8 @@ else
 include $(TOP)/configure/CONFIG_BASE
 endif
 
--include $(TOP)/configure/CONFIG_CC.local
-
-
 include $(TOP)/configure/CONFIG_PKG
 
-
-# IF BASE_INSTALL_LOCATION is not WRITABLE, SUDO and SUDOBASH should be used 
-# SUDO_INFO 1 : SUDO is needed (NOT writable)
-# SUDO_INFO 0 : SUDO is not needed
-SUDO_INFO := $(shell mkdir -p $(E3_BASE_INSTALL_LOCATION) && test -w $(E3_BASE_INSTALL_LOCATION) 1>&2 2> /dev/null; echo $$?)
-
-ifeq "$(SUDO_INFO)" "1"
-SUDO := sudo
-SUDOE = $(SUDO)
-SUDIE += -E
-SUDOBASH = $(SUDOE)
-SUDOBASH += bash -c
-endif    
-
-
-# Valid for only Development Mode, because we clone/remove them
-# See RULES_DEV
-# E3_BASE_SRC_PATH_INFO 1 : the directory is not there
-# E3_BASE_SRC_PATH_INFO 0 : the directory is there
-E3_BASE_SRC_PATH_INFO := $(shell test -d $(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
-
-ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
-INIT_E3_BASE_SRC = 1
-endif
-
-
-
-## This is the temporary solution in order to prevent users from CC errors even
-## if they don't have cc in their system
-
-ifeq "$(E3_CROSS_COMPILER_TARGET_ARCHS)" "linux-ppc64e6500"
-TOOLCHAIN_PATH=/opt/fsl-qoriq/current
-E3_CC_PATH_INFO := $(shell test -d $(TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
-# If cc is not setup, nullify E3_CROSS_COMPILER_TARGET_ARCHS
-ifeq "$(E3_CC_PATH_INFO)" "1"
-E3_CROSS_COMPILER_TARGET_ARCHS=
-endif
-endif
-
-
-### Exclude the following variables to display
-VARS_EXCLUDES+=TOOLCHAIN_PATH
-VARS_EXCLUDES+=E3_CC_PATH_INFO
+include $(TOP)/configure/E3/CONFIG_E3_PATH
+include $(TOP)/configure/E3/CONFIG_SUDO
+include $(TOP)/configure/E3/CONFIG_EXPORT

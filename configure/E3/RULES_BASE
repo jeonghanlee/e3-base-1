@@ -1,10 +1,8 @@
 # -*- mode: Makefile;-*-
 .DEFAULT_GOAL := help
 
-.PHONY: help default 
+.PHONY: help default  distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
 
-
-default: help
 
 
 # help is defined in 
@@ -26,18 +24,18 @@ help:
 	$(MAKEFILE_LIST) | column -ts:	
 
 
-.PHONY: distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
+default: help
 
 
 ## Distclean (Remove bin and lib) the EPICS in  $(E3_BASE_SRC_PATH)
 distclean:
-	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDOE) make distclean
+	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDO) make distclean
 
 
 
 ## Clean the EPICS in  $(E3_BASE_SRC_PATH)
 clean:
-	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDOE) make clean	
+	$(QUIET) cd $(E3_BASE_SRC_PATH) && $(SUDO) make clean	
 
 
 ## Uninstall the installed EPICS BASE according to  $(E3_BASE_INSTALL_LOCATION)
@@ -56,7 +54,7 @@ rebuild: distclean init build
 
 ## Build EPICS BASE(s) according to $(E3_BASE_VERSION)
 build: conf
-	$(QUIET) $(SUDOE) $(MAKE) -C $(E3_BASE_SRC_PATH)
+	$(QUIET) $(SUDO) $(MAKE) -C $(E3_BASE_SRC_PATH)
 
 
 conf: $(E3_BASE_VERSION) copystartup 

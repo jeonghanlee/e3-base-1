@@ -1,16 +1,12 @@
 # -*- mode: Makefile;-*-
-
 # CONFIG
 # include $(EPICS_BASE)/configure/RULES
 
-include $(TOP)/configure/DEFINES_FT
-
-include $(TOP)/configure/RULES_BASE
-
-include $(TOP)/configure/RULES_VARS
-
+include $(TOP)/configure/E3/DEFINES_FT
+include $(TOP)/configure/E3/RULES_BASE
+include $(TOP)/configure/E3/RULES_VARS
 
 ifneq (,$(findstring dev,$(MAKECMDGOALS)))
-include $(TOP)/configure/RULES_DEV
+include $(TOP)/configure/E3/RULES_DEV
 endif
 
