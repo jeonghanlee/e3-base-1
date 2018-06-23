@@ -46,6 +46,7 @@ R315_5_patch_list+=("fix-1678494");
 R315_5_patch_list+=("fix-1699445");
 R315_5_patch_list+=("dbCa-warning");
 R315_5_patch_list+=("osiSockOptMcastLoop");
+R315_5_patch_list+=("fix-ipAddrToAscii");
 
 
 R316_1_patch_list+=("msg503");
