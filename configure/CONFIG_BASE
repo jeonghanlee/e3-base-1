@@ -15,6 +15,6 @@ E3_BASE_SRC_PATH:=$(EPICS_BASE_NAME)
 
 # The definitions shown below can also be placed in an untracked CONFIG_BASE.local
 -include $(TOP)/../CONFIG_BASE.local
+-include $(TOP)/CONFIG_BASE.local
 -include $(TOP)/configure/CONFIG_BASE.local
-
 
