@@ -1,0 +1,84 @@
+# -*- mode: makefile; -*-
+include $(CONFIG)/os/CONFIG.Common.linux-arm
+
+TOOLCHAIN_VER=current
+TOOLCHAIN=fsl
+TOOLCHAIN_SUFFIX=-imx-x11
+
+
+COMMANDLINE_LIBRARY = READLINE
+
+# TOOLCHAIN=
+# TOOLCHAIN_VER=
+# TOOLCHAIN_SUFFIX=
+# If your crosscompiler name has a GNU target prefix like <gnutarget>-gcc,
+# e.g. powerpc64-fsl-linux-gcc, put a GNU_TARGET definition in
+
+# EPICS Variable GNU_TARGET
+# is the same as TARGET_PREFIX in environment-setup-ppc64e6500-fsl-linux
+# except the suffix "-"
+#
+GNU_TARGET=arm-poky-linux-gnueabi
+
+SYSROOTS=/opt/$(TOOLCHAIN)$(TOOLCHAIN_SUFFIX)/$(TOOLCHAIN_VER)/sysroots
+
+# Local SDKTARGETSYSROOT is defined in environment-setup-ppc64e6500-fsl-linux
+#
+SDKTARGETSYSROOT=$(SYSROOTS)/cortexa9hf-neon-poky-linux-gnueabi
+
+CROSS_INCLUDES =	
+
+## CC / CXX / CPP has the similar FLAGS
+FSL_CFLAG = -march=armv7-a -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9 --sysroot=$(SDKTARGETSYSROOT)
+
+ARCH_DEP_CPPFLAGS += $(FSL_CFLAG)
+ARCH_DEP_CFLAGS   += $(FSL_CFLAG)
+ARCH_DEP_CXXFLAGS += $(FSL_CFLAG)
+
+ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT) 
+
+
+ARCH_DEP_CFLAGS   += -O2 -pipe -g -feliminate-unused-debug-types
+ARCH_DEP_CXXFLAGS += -O2 -pipe -g -feliminate-unused-debug-types
+ARCH_DEP_LDFLAGS  += -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed
+
+
+
+# OK to compile with gcc
+# powerpc64-poky-linux-g++ (GCC) 6.2.0
+#ARCH_DEP_CXXFLAGS += -std=gnu++98
+#ARCH_DEP_CXXFLAGS += -std=gnu++03
+#ARCH_DEP_CXXFLAGS += -std=gnu++11
+#ARCH_DEP_CXXFLAGS += -std=gnu++14
+
+#
+#../epicsExceptionTest.cpp: In function ‘void epicsExceptionTestPrivate()’:
+#../epicsExceptionTest.cpp:61:49: error: size of array is too large
+#         char * p = new char [unsuccessfulNewSize];
+#                                                 ^
+#../epicsExceptionTest.cpp:74:38: error: size of array is too large
+#             char [unsuccessfulNewSize];
+
+
+OECORE_NATIVE=x86_64-pokysdk-linux
+
+# GNU_TARGET and GNU_DIR reu
+# EPICS GNU_DIR is the same as
+# /opt/fsl-imx-x11/current/sysroots/x86_64-pokysdk-linux/usr
+GNU_DIR=$(SYSROOTS)/$(OECORE_NATIVE)/usr
+
+# GNU_BIN is defined in CONFIG.gnuCommon as follows:
+# GNU_BIN = $(GNU_DIR)/bin
+# However, toolchain has the GNU_TARGET after bin
+# /opt/fsl-imx-x11/current/sysroots/x86_64-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi
+GNU_BIN=$(GNU_DIR)/bin/$(GNU_TARGET)
+
+# GNU_TARGET_LIB_DIR is defined in CONFIG.CrossCommon as follows:
+# GNU_TARGET_LIB_DIR = $(GNU_TARGET:%= $(GNU_DIR)/%/lib)
+# However, the toolchain han no GNU_TARGET after lib
+# /opt/fsl-imx-x11/current/sysroots/x86_64-pokysdk-linux/usr/lib
+GNU_TARGET_LIB_DIR=$(GNU_DIR)/lib
+
+
+PYTHONHOME=$(SDKTARGETSYSROOT)/usr
+

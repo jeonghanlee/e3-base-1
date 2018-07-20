@@ -1,0 +1,13 @@
+diff --git a/src/ioc/Makefile b/src/ioc/Makefile
+index 6dbd13b5..00d7dba1 100644
+--- a/src/ioc/Makefile
++++ b/src/ioc/Makefile
+@@ -20,7 +20,7 @@ dbCore_SYS_LIBS_WIN32 += ws2_32
+ dbCore_RCS += dbCore.rc
+ dbStaticHost_RCS = dbStaticHost.rc
+ 
+-PROD_LIBS = Com
++PROD_LIBS = ca Com
+ 
+ include $(IOCDIR)/as/Makefile
+ include $(IOCDIR)/bpt/Makefile

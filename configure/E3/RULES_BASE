@@ -65,6 +65,10 @@ $(E3_BASE_VERSION):
 ifneq (,$(findstring linux-ppc64e6500,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
 	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
 endif
+ifneq (,$(findstring linux-cortexa9hf-neon,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-cortexa9hf-neon  $(EPICS_BASE)/configure/os/
+endif
+
 
 
 copystartup:
