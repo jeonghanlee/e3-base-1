@@ -1,7 +1,7 @@
-diff --git a/src/ioc/dbtemplate/test/Makefile b/src/ioc/dbtemplate/test/Makefile
+diff --git src/ioc/dbtemplate/test/Makefile src/ioc/dbtemplate/test/Makefile
 index 30e748983..f2f73daf4 100644
---- a/src/ioc/dbtemplate/test/Makefile
-+++ b/src/ioc/dbtemplate/test/Makefile
+--- src/ioc/dbtemplate/test/Makefile
++++ src/ioc/dbtemplate/test/Makefile
 @@ -11,7 +11,7 @@ include $(TOP)/configure/CONFIG
  TESTPROD_HOST_DEFAULT = dbltExpand
  TESTPROD_HOST_WIN32 = -nil-
