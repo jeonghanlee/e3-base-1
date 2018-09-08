@@ -23,6 +23,7 @@ devuninstall: nonexists
 devdistclean: nonexists
 devpurge: nonexists
 devrebuild: nonexists
+devcopystartup: nonexists
 nonexists:
 	$(QUIET)echo ""
 	$(QUIET)echo "------------------------------------------------------------"
@@ -43,4 +44,5 @@ devpurge: distclean
 	$(QUIET)echo "Removing $(E3_BASE_SRC_PATH) ......... "
 	rm -rf $(E3_BASE_SRC_PATH)
 devrebuild: rebuild
+devcopystartup: copystartup
 endif
