@@ -56,6 +56,8 @@ rebuild: distclean init build
 build: conf
 	$(QUIET) $(SUDO) $(MAKE) -C $(E3_BASE_SRC_PATH)
 
+# consistent with all other modules, do nothing
+install:
 
 conf: $(E3_BASE_VERSION) copystartup 
 
