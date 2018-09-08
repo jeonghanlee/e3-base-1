@@ -74,10 +74,10 @@ endif
 
 
 copystartup:
-ifeq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
+#ifeq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
 	$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
 	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch.pl $(E3_BASE_INSTALL_LOCATION_STARTUP)
-endif
+#endif
 
 
 ## Apply EPICS Patch Files 
