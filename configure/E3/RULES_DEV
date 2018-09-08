@@ -11,7 +11,7 @@ devclone:
 	git clone $(E3_BASE_DEV_GITURL) $(E3_BASE_SRC_PATH)
 
 
-.PHONY: devbuild devpatch devpatchrevert devclean devuninstall devdistclean devpurge nonexists
+.PHONY: devbuild devpatch devpatchrevert devclean devuninstall devdistclean devpurge devrebuild nonexists
 
 ifeq "$(INIT_E3_BASE_SRC)" "1"
 
@@ -22,6 +22,7 @@ devclean: nonexists
 devuninstall: nonexists
 devdistclean: nonexists
 devpurge: nonexists
+devrebuild: nonexists
 nonexists:
 	$(QUIET)echo ""
 	$(QUIET)echo "------------------------------------------------------------"
@@ -41,5 +42,5 @@ devdistclean: devpurge
 devpurge: distclean
 	$(QUIET)echo "Removing $(E3_BASE_SRC_PATH) ......... "
 	rm -rf $(E3_BASE_SRC_PATH)
-
+devrebuild: rebuild
 endif
