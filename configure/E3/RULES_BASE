@@ -114,5 +114,8 @@ $(E3_BASE_SRC_PATH):
 
 checkout: 
 	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
+ifneq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
+	cd $(E3_BASE_SRC_PATH) && git submodule update --init --reference ./
+endif
 
 

@@ -8,7 +8,7 @@ devenv: devvars
 devinit: git-submodule-sync devclone checkout
 
 devclone:
-	git clone --depth 1 --no-single-branch $(E3_BASE_DEV_GITURL) $(E3_BASE_SRC_PATH)
+	git clone $(E3_BASE_DEV_GITURL) $(E3_BASE_SRC_PATH)
 
 
 .PHONY: devbuild devpatch devpatchrevert devclean devuninstall devdistclean devpurge nonexists
