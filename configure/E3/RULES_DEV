@@ -24,6 +24,7 @@ devdistclean: nonexists
 devpurge: nonexists
 devrebuild: nonexists
 devcopystartup: nonexists
+devexistent: nonexists
 nonexists:
 	$(QUIET)echo ""
 	$(QUIET)echo "------------------------------------------------------------"
@@ -45,4 +46,5 @@ devpurge: distclean
 	rm -rf $(E3_BASE_SRC_PATH)
 devrebuild: rebuild
 devcopystartup: copystartup
+devexistent: existent
 endif
