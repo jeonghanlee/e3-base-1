@@ -29,6 +29,12 @@
 			   
 			   However, we need libnt.so and libpvDatabase.so generically in softIocPVA, because this executable is the core program in iocsh.bash
 			   
+			   And it is now tricy to create p0.patch because it stays in gitsubmodule
+			   cd pvapva
+			   git diff  pdbApp/Makefile > ../../../patch/Site/R7.0.1.1/add_nt_pvadatabse_to_softIocPVA.p0.patch
+			   
+			   edit to replace */pdbApp/Makefile with modules/pva2pva/pdbApp/Makefile
+			   
 * Created by Jeong Han Lee, han.lee@esss.se
-* Wednesday, October  3 12:57:07 CEST 2018
+* Wednesday, October  3 22:05:34 CEST 2018
 			    
