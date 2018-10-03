@@ -112,7 +112,7 @@ $(E3_BASE_SRC_PATH):
 	$(QUIET) $(git_base_update)
 
 
+# EPICS 7 needs the following command, and EPICS 3 has no side-effect by them,
+# so we uses in both cases git submodule update --init --reference ./
 checkout: 
-	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
-
-
+	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG) && git submodule update --init --reference ./

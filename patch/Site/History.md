@@ -17,3 +17,18 @@
 ```jhlee@kaffee: epics-base ((R3.15.5))$ git diff --no-prefix startup/EpicsHostArch.pl > ../patch/Site/R3.15.5/ppc64e6500_epics_host_arch.p0.patch```
 * created by Jeong Han Lee, han.lee@esss.se
 * Wednesday, April 18 15:58:02 CEST 2018
+
+
+# R7.0.1.1
+
+* EPICS BASE : R7.0.1.1
+* Description : softIocPVA has only the following EPICS lib dependency :
+               EPICS_BASE_IOC_LIBS  : libdbRecStd.so libdbCore.so libca.so libCom.so
+			   EPICS_BASE_PVA_CORE_LIBS : libpvAccess.so libpvData.so libpvAccessIOC.so libpvAccessCA.so
+	           And, libqsrv.so
+			   
+			   However, we need libnt.so and libpvDatabase.so generically in softIocPVA, because this executable is the core program in iocsh.bash
+			   
+* Created by Jeong Han Lee, han.lee@esss.se
+* Wednesday, October  3 12:57:07 CEST 2018
+			    

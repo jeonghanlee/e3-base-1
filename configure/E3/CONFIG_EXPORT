@@ -3,13 +3,17 @@
 # (EPICS) EPICS_BASE (WILL BE USED in the EPICS BUILDING SYSTEM)
 EPICS_BASE:=$(TOP)/$(E3_BASE_SRC_PATH)
 EPICS_HOST_ARCH:=$(shell $(EPICS_BASE)/startup/EpicsHostArch.pl)
+MSI:=$(EPICS_BASE)/bin/$(EPICS_HOST_ARCH)/msi
 
-export EPICS_BASE
-export EPICS_HOST_ARCH
+EXPORT_VARS+=EPICS_HOST_ARCH
+EXPORT_VARS+=EPICS_BASE
+EXPORT_VARS+=MSI
 
-#export E3_SITEMODS_PATH
-#export E3_SITEAPPS_PATH
-#export E3_SITELIBS_PATH
-#export E3_SEQUENCER_NAME
-#export E3_SEQUENCER_VERSION
+EXPORT_VARS+=QUIET
+EXPORT_VARS+=$(filter %_DEP_VERSION,$(.VARIABLES))
+EXPORT_VARS+=$(filter WITH_%,$(.VARIABLES))
+EXPORT_VARS+=$(filter SUDO%,$(.VARIABLES))
+
+export_version=$(eval export $1)
+$(eval $(foreach v,$(EXPORT_VARS),$(call export_version,$v)))
 
