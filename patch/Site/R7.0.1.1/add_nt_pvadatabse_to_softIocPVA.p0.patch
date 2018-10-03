@@ -1,12 +1,20 @@
-diff --git modules/pva2pva/pdbApp/Makefile pdbApp/Makefile
-index 37844d6..f55ba33 100644
+diff --git modules/pva2pva/pdbApp/Makefile modules/pva2pva/pdbApp/Makefile
+index 37844d6bd..e1bf59702 100644
 --- modules/pva2pva/pdbApp/Makefile
 +++ modules/pva2pva/pdbApp/Makefile
 @@ -37,6 +37,7 @@ softIocPVA_SRCS += softMain.cpp
  softIocPVA_SRCS += softIocPVA_registerRecordDeviceDriver.cpp
  
  softIocPVA_LIBS += qsrv
-+softIocPVA_LIBS += nt pvDatabase
++softIocPVA_LIBS += pvDatabase nt
  softIocPVA_LIBS += $(EPICS_BASE_PVA_CORE_LIBS)
  softIocPVA_LIBS += $(EPICS_BASE_IOC_LIBS)
+ 
+@@ -46,6 +47,7 @@ DBD += qsrv.dbd
+ softIocPVA_DBD += softIoc.dbd
+ softIocPVA_DBD += PVAServerRegister.dbd
+ softIocPVA_DBD += qsrv.dbd
++softIocPVA_DBD += registerChannelProviderLocal.dbd
+ 
+ #===========================
  
