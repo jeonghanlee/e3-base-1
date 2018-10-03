@@ -1,8 +1,16 @@
 diff --git modules/pva2pva/pdbApp/Makefile modules/pva2pva/pdbApp/Makefile
-index 37844d6bd..e1bf59702 100644
+index 37844d6bd..051f94212 100644
 --- modules/pva2pva/pdbApp/Makefile
 +++ modules/pva2pva/pdbApp/Makefile
-@@ -37,6 +37,7 @@ softIocPVA_SRCS += softMain.cpp
+@@ -31,12 +31,15 @@ FINAL_LOCATION ?= $(shell $(PERL) $(TOOLS)/fullPathName.pl $(INSTALL_LOCATION))
+ 
+ USR_CPPFLAGS += -DFINAL_LOCATION="\"$(FINAL_LOCATION)\""
+ 
++USR_LDFLAGS += -Wl,--no-as-needed
++
+ PROD_IOC += softIocPVA
+ 
+ softIocPVA_SRCS += softMain.cpp
  softIocPVA_SRCS += softIocPVA_registerRecordDeviceDriver.cpp
  
  softIocPVA_LIBS += qsrv
@@ -10,7 +18,7 @@ index 37844d6bd..e1bf59702 100644
  softIocPVA_LIBS += $(EPICS_BASE_PVA_CORE_LIBS)
  softIocPVA_LIBS += $(EPICS_BASE_IOC_LIBS)
  
-@@ -46,6 +47,7 @@ DBD += qsrv.dbd
+@@ -46,6 +49,7 @@ DBD += qsrv.dbd
  softIocPVA_DBD += softIoc.dbd
  softIocPVA_DBD += PVAServerRegister.dbd
  softIocPVA_DBD += qsrv.dbd
