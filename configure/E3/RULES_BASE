@@ -56,6 +56,8 @@ rebuild: distclean init build
 build: conf
 	$(QUIET) $(SUDO) $(MAKE) -C $(E3_BASE_SRC_PATH)
 
+# consistent with all other modules, do nothing
+install:
 
 conf: $(E3_BASE_VERSION) copystartup 
 
@@ -72,9 +74,10 @@ endif
 
 
 copystartup:
+#ifeq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
 	$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
 	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch.pl $(E3_BASE_INSTALL_LOCATION_STARTUP)
-
+#endif
 
 
 ## Apply EPICS Patch Files 
@@ -116,3 +119,8 @@ $(E3_BASE_SRC_PATH):
 # so we uses in both cases git submodule update --init --reference ./
 checkout: 
 	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG) && git submodule update --init --reference ./
+
+#ifneq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
+#	cd $(E3_BASE_SRC_PATH) && git submodule update --init --reference ./
+#endif
+
