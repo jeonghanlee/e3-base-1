@@ -72,11 +72,15 @@ ifneq (,$(findstring linux-cortexa9hf-neon,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
 endif
 
 
-
+# We may not need to copy startup later, From 3.15.16-rc1,
+# one can find EpicsHostArch.pl in the following case. 
+# Base source files : src/tools/
+# Base installation : lib/perl/ 
 copystartup:
-#ifeq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
+# 3.15.6 has the same issue
+#ifneq (,$(findstring 3.15.5,$(EPICS_SHORT_VERSION)))
 	$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
-	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch.pl $(E3_BASE_INSTALL_LOCATION_STARTUP)
+	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch* $(E3_BASE_INSTALL_LOCATION_STARTUP)
 #endif
 
 

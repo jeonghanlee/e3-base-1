@@ -15,3 +15,5 @@ include $(TOP)/configure/CONFIG_PKG
 include $(TOP)/configure/E3/CONFIG_E3_PATH
 include $(TOP)/configure/E3/CONFIG_SUDO
 include $(TOP)/configure/E3/CONFIG_EXPORT
+
+-include $(EPICS_BASE)/configure/CONFIG_BASE_VERSION

@@ -68,7 +68,7 @@ EPICS_TIMEZONE = CET/CEST::-60:032502:102802
 
 # Malmo"
 EPICS_TS_NTP_INET=mmo1.ntp.se
-#EPICS_TS_NTP_INET=mmo2.ntp.se
+EPICS_TS_NTP_INET=mmo2.ntp.se
 
 # Go"teborg
 #EPICS_TS_NTP_INET=gbg1.ntp.se
@@ -82,14 +82,18 @@ EPICS_TS_NTP_INET=mmo1.ntp.se
 #EPICS_TS_NTP_INET=svl1.ntp.se
 #EPICS_TS_NTP_INET=svl2.ntp.se
 
+#ESS Technical Network NTP Server
+EPICS_TS_NTP_INET=ntp-cluster01.tn.esss.lu.se
+EPICS_TS_NTP_INET=172.16.6.38
+
 
 # IOC Shell:
 # IOCSH_PS1
 #	Prompt string
 # IOCSH_HISTSIZE
 #	Number of lines of command history to keep.
-IOCSH_PS1="ESS-E3> "
-IOCSH_HISTSIZE=100
+IOCSH_PS1="ESS-e3> "
+IOCSH_HISTSIZE=1000
 
 # Log Server:
 # EPICS_IOC_LOG_INET 
