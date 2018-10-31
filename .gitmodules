@@ -5,4 +5,4 @@
 [submodule "pkg_automation"]
 	path = pkg_automation
 	url = https://github.com/jeonghanlee/pkg_automation
-	ignore = dirty
+	ignore = all
