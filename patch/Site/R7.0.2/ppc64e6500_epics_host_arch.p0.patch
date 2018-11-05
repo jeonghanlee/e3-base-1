@@ -1,0 +1,17 @@
+diff --git src/tools/EpicsHostArch.pl src/tools/EpicsHostArch.pl
+index e8e49bc..875831c 100644
+--- src/tools/EpicsHostArch.pl
++++ src/tools/EpicsHostArch.pl
+@@ -49,6 +49,12 @@ sub HostArch {
+             }
+             die "$0: macOS CPU type '$cpu' not recognized\n";
+         }
++	if (m/^powerpc64-linux/) {
++            for ($cpu) {
++                return 'linux-ppc64e6500' if m/^ppc64/;
++            }
++            die "$0: CPU type '$cpu' not recognized\n";
++        }
+ 
+         die "$0: Architecture '$arch' not recognized\n";
+     }
