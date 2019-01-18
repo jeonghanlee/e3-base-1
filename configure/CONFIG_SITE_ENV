@@ -67,8 +67,8 @@ EPICS_TIMEZONE = CET/CEST::-60:033102:102702
 # ESS will use the most closest Sweden NTP servers
 
 # Malmo"
-EPICS_TS_NTP_INET=mmo1.ntp.se
-EPICS_TS_NTP_INET=mmo2.ntp.se
+#EPICS_TS_NTP_INET=mmo1.ntp.se
+#EPICS_TS_NTP_INET=mmo2.ntp.se
 
 # Go"teborg
 #EPICS_TS_NTP_INET=gbg1.ntp.se
