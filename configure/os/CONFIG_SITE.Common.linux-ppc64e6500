@@ -3,8 +3,9 @@ include $(CONFIG)/os/CONFIG.Common.linux-ppc64
 
 
 TOOLCHAIN_VER=current
+TOOLCHAIN_PATH=/opt/ifc14xx
 TOOLCHAIN=fsl
-TOOLCHAIN_SUFFIX=-qoriq
+#TOOLCHAIN_SUFFIX=-qoriq
 
 
 COMMANDLINE_LIBRARY = READLINE
@@ -21,7 +22,7 @@ COMMANDLINE_LIBRARY = READLINE
 #
 GNU_TARGET=powerpc64-$(TOOLCHAIN)-linux
 
-SYSROOTS=/opt/$(TOOLCHAIN)$(TOOLCHAIN_SUFFIX)/$(TOOLCHAIN_VER)/sysroots
+SYSROOTS=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_VER)/sysroots
 
 # Local SDKTARGETSYSROOT is defined in environment-setup-ppc64e6500-fsl-linux
 #
