@@ -124,9 +124,11 @@ $(E3_BASE_SRC_PATH):
 # EPICS 7 needs the following command, and EPICS 3 has no side-effect by them,
 # so we uses in both cases git submodule update --init --reference ./
 checkout: 
-	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG) && git submodule update --init --reference ./
+	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
+ifneq (,$(findstring tags/R7.0.1.1,$(EPICS_BASE_TAG)))
+	cd $(E3_BASE_SRC_PATH) && git clone . modules/ca && git clone . modules/database && git clone . modules/libcom && git submodule update --init
+else
+	cd $(E3_BASE_SRC_PATH) && git submodule update --init ./
+endif
 
-#ifneq (,$(findstring tags/R7,$(EPICS_BASE_TAG)))
-#	cd $(E3_BASE_SRC_PATH) && git submodule update --init --reference ./
-#endif
 
