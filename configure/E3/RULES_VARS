@@ -2,8 +2,9 @@
 
 E3_BASE_VARIABLES:=$(sort $(filter-out $(VARS_EXCLUDES) VARS_EXCLUDES,$(.VARIABLES)))
 
-.PHONY : vars env header
+LEVEL?=1
 
+.PHONY : vars env header
 
 vars: header
 	$(foreach v, $(E3_BASE_VARIABLES), $(info $(v) = $($(v)))) @#noop
@@ -19,4 +20,9 @@ header:
 
 
 existent:
-	$(QUIET)tree -L 1 $(E3_BASE_INSTALL_LOCATION)
+ifeq (, $(shell which tree))
+	$(QUIET)ls -d $(E3_MODULES_PATH)/$(E3_MODULE_NAME)
+	$(QUIET)find $(E3_MODULES_PATH)/$(E3_MODULE_NAME)/ -maxdepth $(LEVEL) | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/:---\1/"
+else
+	$(QUIET)tree -L $(LEVEL) $(E3_MODULES_PATH)/$(E3_MODULE_NAME)
+endif
