@@ -21,8 +21,8 @@ header:
 
 existent:
 ifeq (, $(shell which tree))
-	$(QUIET)ls -d $(E3_MODULES_PATH)/$(E3_MODULE_NAME)
-	$(QUIET)find $(E3_MODULES_PATH)/$(E3_MODULE_NAME)/ -maxdepth $(LEVEL) | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/:---\1/"
+	$(QUIET)ls -d $(E3_BASE_INSTALL_LOCATION)
+	$(QUIET)find $(E3_BASE_INSTALL_LOCATION)/ -maxdepth $(LEVEL) | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/:---\1/"
 else
-	$(QUIET)tree -L $(LEVEL) $(E3_MODULES_PATH)/$(E3_MODULE_NAME)
+	$(QUIET)tree -L $(LEVEL) $(E3_BASE_INSTALL_LOCATION)
 endif
