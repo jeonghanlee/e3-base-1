@@ -35,9 +35,9 @@ endif
 
 ifeq "$(E3_CROSS_COMPILER_TARGET_ARCHS)" "linux-ppc64e6500"
 TOOLCHAIN_PATH=$(E3_CROSS_COMPILER_TOOLCHAIN_PATH)/$(E3_CROSS_COMPILER_TOOLCHAIN_VER)
-E3_CC_PATH_INFO := $(shell test -d $(TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
+E3_CROSS_COMPILER_TOOLCHAIN_PATH_INFO := $(shell test -d $(TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
 # If cc is not setup, nullify E3_CROSS_COMPILER_TARGET_ARCHS
-ifeq "$(E3_CC_PATH_INFO)" "1"
+ifeq "$(E3_CROSS_COMPILER_TOOLCHAIN_PATH_INFO)" "1"
 E3_CROSS_COMPILER_TARGET_ARCHS=
 endif
 endif
@@ -45,4 +45,3 @@ endif
 
 ### Exclude the following variables to display
 VARS_EXCLUDES+=TOOLCHAIN_PATH
-VARS_EXCLUDES+=E3_CC_PATH_INFO
