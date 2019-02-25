@@ -77,12 +77,13 @@ endif
 # Base source files : src/tools/
 # Base installation : lib/perl/
 # However, 7.0.1.1 is the same as 3.15.5
-# 
+#
+# Suppress startup directory related No such file or directory messages and errors in Makefile
 copystartup:
 # 3.15.6 has the same issue
 #ifneq (,$(findstring 3.15.5,$(EPICS_SHORT_VERSION)))
-	$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
-	$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch* $(E3_BASE_INSTALL_LOCATION_STARTUP)
+	-$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
+	-$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch* $(E3_BASE_INSTALL_LOCATION_STARTUP) 2> /dev/null || true
 #endif
 
 
@@ -130,5 +131,4 @@ ifneq (,$(findstring tags/R7.0.1.1,$(EPICS_BASE_TAG)))
 else
 	cd $(E3_BASE_SRC_PATH) && git submodule update --init ./
 endif
-
 
