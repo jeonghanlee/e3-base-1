@@ -1,4 +1,7 @@
 # -*- mode: Makefile;-*-
+
+.NOTPARALLEL:
+
 .DEFAULT_GOAL := help
 
 .PHONY: help default  distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
