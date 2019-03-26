@@ -70,6 +70,9 @@ endif
 ifneq (,$(findstring linux-cortexa9hf-neon,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
 	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-cortexa9hf-neon  $(EPICS_BASE)/configure/os/
 endif
+ifneq (,$(findstring linux-corei7-poky,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-corei7-poky  $(EPICS_BASE)/configure/os/
+endif
 
 
 # We may not need to copy startup later, From 3.15.16-rc1,
