@@ -52,7 +52,7 @@ $(E3_BASE_INSTALL_LOCATION):
 .PHONY: conf copystartup  $(E3_BASE_VERSION) build rebuild patch patchrevert
 
 
-rebuild: distclean init build
+rebuild: distclean init patch build
 
 
 ## Build EPICS BASE(s) according to $(E3_BASE_VERSION)

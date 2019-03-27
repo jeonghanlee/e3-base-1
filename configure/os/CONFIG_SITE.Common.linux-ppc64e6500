@@ -1,21 +1,14 @@
 # -*- mode: makefile; -*-
 include $(CONFIG)/os/CONFIG.Common.linux-ppc64
 
-
-TOOLCHAIN_VER=$(CROSS_COMPILER_TOOLCHAIN_VER)
-TOOLCHAIN_PATH=$(CROSS_COMPILER_TOOLCHAIN_PATH)
+TOOLCHAIN_VER=$(CC_IFC14XX_TOOLCHAIN_VER)
+TOOLCHAIN_PATH=$(CC_IFC14XX_TOOLCHAIN_PATH)
 TOOLCHAIN=fsl
-#TOOLCHAIN_SUFFIX=-qoriq
-
 
 COMMANDLINE_LIBRARY = READLINE
 
-# TOOLCHAIN=
-# TOOLCHAIN_VER=
-# TOOLCHAIN_SUFFIX=
 # If your crosscompiler name has a GNU target prefix like <gnutarget>-gcc,
 # e.g. powerpc64-fsl-linux-gcc, put a GNU_TARGET definition in
-
 # EPICS Variable GNU_TARGET
 # is the same as TARGET_PREFIX in environment-setup-ppc64e6500-fsl-linux
 # except the suffix "-"
@@ -30,12 +23,16 @@ SDKTARGETSYSROOT=$(SYSROOTS)/ppc64e6500-$(TOOLCHAIN)-linux
 
 CROSS_INCLUDES =	
 
-FSL_CFLAG = --sysroot=$(SDKTARGETSYSROOT) -mhard-float -mcpu=e6500
+#
+# Check export CC="" after *-gcc, the all flags should be TOOLCHAIN_CFLAG, which can be used
+# in ARCH_DEP_CPPFLAGS, ARCH_DEP_CFLAGS, ARCH_DEP_CXXFLAGS, ARCH_DEP_LDFLAGS
 
-ARCH_DEP_CPPFLAGS += $(FSL_CFLAG)
+TOOLCHAIN_CFLAG = --sysroot=$(SDKTARGETSYSROOT) -mhard-float -mcpu=e6500
 
-ARCH_DEP_CFLAGS   += $(FSL_CFLAG)
-ARCH_DEP_CXXFLAGS += $(FSL_CFLAG)
+
+ARCH_DEP_CPPFLAGS += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CFLAGS   += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CXXFLAGS += $(TOOLCHAIN_CFLAG)
 ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT) 
 
 
@@ -44,7 +41,6 @@ ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types
 ARCH_DEP_LDFLAGS  += -Wl,-O1
 ARCH_DEP_LDFLAGS  += -Wl,--hash-style=gnu
 ARCH_DEP_LDFLAGS  += -Wl,--as-needed
-
 
 
 # OK to compile with gcc
@@ -81,27 +77,6 @@ GNU_BIN=$(GNU_DIR)/bin/$(GNU_TARGET)
 #
 GNU_TARGET_LIB_DIR=$(GNU_DIR)/lib
 
-
-# QorIQ SDK (FSL Reference Distro)
-# http://www.nxp.com/products/software-and-tools/run-time-software/linux-sdk/linux-sdk-for-qoriq-processors:SDKLINUX
-#
-## fsl-qoriq toolchain should be installed in the following structures:
-# jhlee@kaffee: ~$ tree -L 2 /opt/fsl-qoriq/
-# /opt/fsl-qoriq/
-# ├── [root     4.0K]  1.9
-# │   ├── [root     2.4K]  environment-setup-ppc64e6500-fsl-linux
-# │   ├── [root     2.4K]  environment-setup-ppc64e6500-fsl-linux~
-# │   ├── [root     2.5K]  environment-setup-ppce6500-fslmllib32-linux
-# │   ├── [root      11K]  site-config-ppc64e6500-fsl-linux
-# │   ├── [root      11K]  site-config-ppce6500-fslmllib32-linux
-# │   ├── [root     4.0K]  sysroots
-# │   ├── [root      124]  version-ppc64e6500-fsl-linux
-# │   └── [root      124]  version-ppce6500-fslmllib32-linux
-# └── [root     4.0K]  2.0
-#   ├── [root     2.9K]  environment-setup-ppc64e6500-fsl-linux
-#   ├── [root      44K]  site-config-ppc64e6500-fsl-linux
-#   ├── [root     4.0K]  sysroots
-#   └── [root      124]  version-ppc64e6500-fsl-linux
 
 
 PYTHONHOME=$(SDKTARGETSYSROOT)/usr
