@@ -1,18 +1,17 @@
-# (EPICS) EPICS_BASE (WILL BE USED in the EPICS BUILDING SYSTEM)
-EPICS_BASE:=$(TOP)/$(E3_BASE_SRC_PATH)
-EPICS_HOST_ARCH:=$(shell $(EPICS_BASE)/startup/EpicsHostArch.pl 2> /dev/null)
+
+EPICS_HOST_ARCH:=$(shell $(TOP)/$(E3_BASE_SRC_PATH)/startup/EpicsHostArch.pl 2> /dev/null)
 
 # In near future, BASE may drop "startup" directory, so
 #
 ifeq ($(strip $(EPICS_HOST_ARCH)),)
-EPICS_HOST_ARCH:=$(shell perl $(EPICS_BASE)/src/tools/EpicsHostArch.pl 2> /dev/null)
+EPICS_HOST_ARCH:=$(shell perl $(TOP)/$(E3_BASE_SRC_PATH)/src/tools/EpicsHostArch.pl 2> /dev/null)
 endif
 
-MSI:=$(EPICS_BASE)/bin/$(EPICS_HOST_ARCH)/msi
+#MSI:=$(E3_EPICS_BASE_SRC)/bin/$(EPICS_HOST_ARCH)/msi
 
 EXPORT_VARS+=EPICS_HOST_ARCH
-EXPORT_VARS+=EPICS_BASE
-EXPORT_VARS+=MSI
+#EXPORT_VARS+=EPICS_BASE
+#EXPORT_VARS+=MSI
 
 EXPORT_VARS+=QUIET
 EXPORT_VARS+=$(filter %_DEP_VERSION,$(.VARIABLES))

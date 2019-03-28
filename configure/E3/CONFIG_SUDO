@@ -22,7 +22,7 @@ endif
 # See RULES_DEV
 # E3_BASE_SRC_PATH_INFO 1 : the directory is not there
 # E3_BASE_SRC_PATH_INFO 0 : the directory is there
-E3_BASE_SRC_PATH_INFO := $(shell test -d $(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
+E3_BASE_SRC_PATH_INFO := $(shell test -d $(TOP)/$(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
 
 ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
 INIT_E3_BASE_SRC = 1
