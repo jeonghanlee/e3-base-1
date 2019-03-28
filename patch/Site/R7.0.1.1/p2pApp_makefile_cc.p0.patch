@@ -1,0 +1,13 @@
+diff --git modules/pva2pva/p2pApp/Makefile modules/pva2pva/p2pApp/Makefile
+index 602518b..0ee5b13 100644
+--- modules/pva2pva/p2pApp/Makefile
++++ modules/pva2pva/p2pApp/Makefile
+@@ -16,7 +16,7 @@ PROD_SRCS += chancache.cpp
+ PROD_SRCS += moncache.cpp
+ PROD_SRCS += channel.cpp
+ 
+-PROD_LIBS += pvAccessIOC pvAccess pvData Com
++PROD_LIBS += pvAccessIOC pvAccess pvData Com dbCore ca
+ 
+ TESTPROD_HOST += testmon
+ testmon_SRCS += testmon.cpp
