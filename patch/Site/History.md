@@ -43,3 +43,16 @@
 * Created by Jeong Han Lee, han.lee@esss.se
 * Wednesday, October  3 22:05:34 CEST 2018
 			    
+
+
+# R3.15.X
+
+There are two patch files are needed for R3.15.5 with Yocto Cross Compiler tools. 
+* `cortexa9hf-neon-corei7-poky_dbltExpand_lib_p0.patch`
+* `cortexa9hf-neon-corei7-poky_ioc_prod_lib.p0.patch`
+
+However, R3.15.6, makefile was updated to cover dbltExpand_lib_p0.patch. So we don't need this patch. In addition,
+even if we don't have ioc_prod_lib.p0.patch in R3.15.6, we can compile R3.15.6 base without any issues. 
+
+
+
