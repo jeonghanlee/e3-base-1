@@ -1,0 +1,29 @@
+diff --git src/tools/EpicsHostArch.pl src/tools/EpicsHostArch.pl
+index e8e49bc5e..db7caf6ef 100644
+--- src/tools/EpicsHostArch.pl
++++ src/tools/EpicsHostArch.pl
+@@ -42,6 +42,10 @@ sub HostArch {
+         return 'solaris-x86'    if m/^i86pc-solaris/;
+ 
+         my ($kernel, $hostname, $release, $version, $cpu) = uname;
++	if (m/^x86_64-linux/) {
++	    if ( $release=~ m/cct$/) {return "linux-corei7-poky";}
++	    else                     {return "linux-x86_64"; }
++	}
+         if (m/^darwin/) {
+             for ($cpu) {
+                 return 'darwin-x86' if m/^(i386|x86_64)/;
+@@ -49,7 +53,12 @@ sub HostArch {
+             }
+             die "$0: macOS CPU type '$cpu' not recognized\n";
+         }
+-
++        if (m/^powerpc64-linux/) {
++            for ($cpu) {
++		return 'linux-ppc64e6500' if m/^ppc64/;
++            }
++            die "$0: linux-ppc64 OS CPU type '$cpu' not recognized\n";
++        }
+         die "$0: Architecture '$arch' not recognized\n";
+     }
+ }
