@@ -1,38 +1,47 @@
 # -*- mode: makefile; -*-
 include $(CONFIG)/os/CONFIG.Common.linux-x86_64
 
-
-TOOLCHAIN_VER=$(CROSS_COMPILER_TOOLCHAIN_VER)
-TOOLCHAIN_PATH=$(CROSS_COMPILER_TOOLCHAIN_PATH)
+TOOLCHAIN_VER=$(CC_POKY_TOOLCHAIN_VER)
+TOOLCHAIN_PATH=$(CC_POKY_TOOLCHAIN_PATH)
 TOOLCHAIN=poky
-
 
 COMMANDLINE_LIBRARY = READLINE
 
-
+# If your crosscompiler name has a GNU target prefix like <gnutarget>-gcc,
+# e.g. *-gcc, put a GNU_TARGET definition in
 # EPICS Variable GNU_TARGET
-# is the same as TARGET_PREFIX in environment-setup-ppc64e6500-fsl-linux
+# is the same as TARGET_PREFIX in environment-setup*-linux
 # except the suffix "-"
 #
 GNU_TARGET=x86_64-$(TOOLCHAIN)-linux
 
 SYSROOTS=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_VER)/sysroots
 
-# Local SDKTARGETSYSROOT is defined in environment-setup-ppc64e6500-fsl-linux
+# Local SDKTARGETSYSROOT is defined in environment-setup-*-linux
 #
 SDKTARGETSYSROOT=$(SYSROOTS)/corei7-64-$(TOOLCHAIN)-linux
 
 CROSS_INCLUDES =
 
-POKY_CFLAG = --sysroot=$(SDKTARGETSYSROOT) -m64 -march=nehalem -mtune=generic -mfpmath=sse -msse4.2
+# -mfpmath=sse
+# enables use of XMM registers in floating point instructions (instead of stack in x87 mode)
+#
+# -msse4.2
+# Intel Streaming SIMD Extensions 4 (SSE4) introduces 54 new instructions
+# in Intel 64 processors made from 45 nm process technology.
+# The next generation 45nm processors is Nehalem
+#
+# Check export CC="" after *-gcc, the all flags should be TOOLCHAIN_CFLAG, which can be used
+# in ARCH_DEP_CPPFLAGS, ARCH_DEP_CFLAGS, ARCH_DEP_CXXFLAGS, ARCH_DEP_LDFLAGS
+#
+TOOLCHAIN_CFLAG = --sysroot=$(SDKTARGETSYSROOT) -march=nehalem -mtune=generic -mfpmath=sse -msse4.2
 
-ARCH_DEP_CPPFLAGS += $(POKY_CFLAG)
-
-ARCH_DEP_CFLAGS   += $(POKY_CFLAG)
-ARCH_DEP_CXXFLAGS += $(POKY_CFLAG)
+ARCH_DEP_CPPFLAGS += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CFLAGS   += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CXXFLAGS += $(TOOLCHAIN_CFLAG)
 ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT)
 
-
+# We remove -02 -g flags, becasue the CONFIG.Common.linux-x86_64
 ARCH_DEP_CFLAGS   += -pipe -feliminate-unused-debug-types 
 ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types
 ARCH_DEP_LDFLAGS  += -Wl,-O1

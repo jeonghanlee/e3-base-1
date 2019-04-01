@@ -22,7 +22,7 @@ endif
 # See RULES_DEV
 # E3_BASE_SRC_PATH_INFO 1 : the directory is not there
 # E3_BASE_SRC_PATH_INFO 0 : the directory is there
-E3_BASE_SRC_PATH_INFO := $(shell test -d $(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
+E3_BASE_SRC_PATH_INFO := $(shell test -d $(TOP)/$(E3_BASE_SRC_PATH) 1>&2 2> /dev/null; echo $$?)
 
 ifeq "$(E3_BASE_SRC_PATH_INFO)" "1"
 INIT_E3_BASE_SRC = 1
@@ -32,16 +32,25 @@ endif
 
 ## This is the temporary solution in order to prevent users from CC errors even
 ## if they don't have cc in their system
+## *_TOOLCHAIN_PATH_INF = 1 means that the system doesn't have the installaed cross toolchain
+## 
+ifneq (,$(findstring linux-ppc64e6500,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+IFC14XX_TOOLCHAIN_PATH=$(E3_CC_IFC14XX_TOOLCHAIN_PATH)/$(E3_CC_IFC14XX_TOOLCHAIN_VER)
+E3_CC_IFC14XX_TOOLCHAIN_PATH_INFO := $(shell test -d $(IFC14XX_TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
+ifeq "$(E3_CC_IFC14XX_TOOLCHAIN_PATH_INFO)" "1"
+E3_CROSS_COMPILER_TARGET_ARCHS:=$(filter-out linux-ppc64e6500,$(E3_CROSS_COMPILER_TARGET_ARCHS))
+endif
+endif
 
-ifeq "$(E3_CROSS_COMPILER_TARGET_ARCHS)" "linux-ppc64e6500"
-TOOLCHAIN_PATH=$(E3_CROSS_COMPILER_TOOLCHAIN_PATH)/$(E3_CROSS_COMPILER_TOOLCHAIN_VER)
-E3_CROSS_COMPILER_TOOLCHAIN_PATH_INFO := $(shell test -d $(TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
-# If cc is not setup, nullify E3_CROSS_COMPILER_TARGET_ARCHS
-ifeq "$(E3_CROSS_COMPILER_TOOLCHAIN_PATH_INFO)" "1"
-E3_CROSS_COMPILER_TARGET_ARCHS=
+ifneq (,$(findstring linux-corei7-poky,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+POKY_TOOLCHAIN_PATH=$(E3_CC_POKY_TOOLCHAIN_PATH)/$(E3_CC_POKY_TOOLCHAIN_VER)
+E3_CC_POKY_TOOLCHAIN_PATH_INFO := $(shell test -d $(POKY_TOOLCHAIN_PATH) 1>&2 2> /dev/null; echo $$?)
+ifeq "$(E3_CC_POKY_TOOLCHAIN_PATH_INFO)" "1"
+E3_CROSS_COMPILER_TARGET_ARCHS:=$(filter-out linux-corei7-poky,$(E3_CROSS_COMPILER_TARGET_ARCHS))
 endif
 endif
 
 
 ### Exclude the following variables to display
-VARS_EXCLUDES+=TOOLCHAIN_PATH
+VARS_EXCLUDES+=POKY_TOOLCHAIN_PATH
+VARS_EXCLUDES+=IFC14XX_TOOLCHAIN_PATH

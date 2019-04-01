@@ -20,22 +20,24 @@ endef
 
 define site_base
 m4 -D_CROSS_COMPILER_TARGET_ARCHS="$(E3_CROSS_COMPILER_TARGET_ARCHS)" -D_EPICS_SITE_VERSION="E3-$@-patch" \
--D_INSTALL_LOCATION="$(E3_BASE_INSTALL_LOCATION)" -D_CROSS_COMPILER_TOOLCHAIN_PATH="$(E3_CROSS_COMPILER_TOOLCHAIN_PATH)" -D_CROSS_COMPILER_TOOLCHAIN_VER="$(E3_CROSS_COMPILER_TOOLCHAIN_VER)" $(TOP)/configure/config_site.m4 \
-> $(EPICS_BASE)/configure/CONFIG_SITE
-$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(EPICS_BASE)/configure/
+   -D_INSTALL_LOCATION="$(E3_BASE_INSTALL_LOCATION)" \
+   -D_CC_IFC14XX_TOOLCHAIN_PATH="$(E3_CC_IFC14XX_TOOLCHAIN_PATH)" -D_CC_IFC14XX_TOOLCHAIN_VER="$(E3_CC_IFC14XX_TOOLCHAIN_VER)" \
+   -D_CC_POKY_TOOLCHAIN_PATH="$(E3_CC_POKY_TOOLCHAIN_PATH)" -D_CC_POKY_TOOLCHAIN_VER="$(E3_CC_POKY_TOOLCHAIN_VER)" \
+   $(TOP)/configure/config_site.m4 > $(TOP)/$(E3_BASE_SRC_PATH)/configure/CONFIG_SITE
+$(QUIET) install -m 644 $(TOP)/configure/CONFIG_SITE_ENV  $(TOP)/$(E3_BASE_SRC_PATH)/configure/
 endef
 
 define patch_base
 for i in $(wildcard $(TOP)/patch/R$1/*p0.patch); do\
-	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
-	patch -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+	printf "\n>> Patching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -d $(TOP)/$(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
 done
 endef
 
 define patch_revert_base
 for i in $(wildcard $(TOP)/patch/R$1/*p0.patch); do\
-	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
-	patch -R -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+	printf "\n<< Reverting the applied patch %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -R -d $(TOP)/$(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
 done
 
 endef
@@ -43,16 +45,16 @@ endef
 
 define patch_site
 for i in $(wildcard $(TOP)/patch/Site/R$1/*p0.patch); do\
-	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
-	patch -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+	printf "\n>> Patching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -d $(TOP)/$(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
 done
 endef
 
 
 define patch_revert_site
 for i in $(wildcard $(TOP)/patch/Site/R$1/*p0.patch); do\
-	printf "\nPatching %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
-	patch -R -d $(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
+	printf "\n<< Reverting the applied patch %s %s with the file : %s\n" "$(E3_BASE_SRC_PATH)" "$1" "$$i"; \
+	patch -R -d $(TOP)/$(E3_BASE_SRC_PATH) --ignore-whitespace -p0 < $$i;\
 done
 
 endef

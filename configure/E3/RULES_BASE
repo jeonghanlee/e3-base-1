@@ -1,8 +1,10 @@
 # -*- mode: Makefile;-*-
 
+
 .NOTPARALLEL:
 
 .DEFAULT_GOAL := help
+
 
 .PHONY: help default  distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
 
@@ -52,7 +54,7 @@ $(E3_BASE_INSTALL_LOCATION):
 .PHONY: conf copystartup  $(E3_BASE_VERSION) build rebuild patch patchrevert
 
 
-rebuild: distclean init build
+rebuild: distclean init patch build
 
 
 ## Build EPICS BASE(s) according to $(E3_BASE_VERSION)
@@ -68,13 +70,13 @@ conf: $(E3_BASE_VERSION) copystartup
 $(E3_BASE_VERSION):
 	$(QUIET) $(site_base)
 ifneq (,$(findstring linux-ppc64e6500,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
-	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500  $(EPICS_BASE)/configure/os/
-endif
-ifneq (,$(findstring linux-cortexa9hf-neon,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
-	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-cortexa9hf-neon  $(EPICS_BASE)/configure/os/
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-ppc64e6500   $(TOP)/$(E3_BASE_SRC_PATH)/configure/os/
 endif
 ifneq (,$(findstring linux-corei7-poky,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
-	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-corei7-poky  $(EPICS_BASE)/configure/os/
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-corei7-poky  $(TOP)/$(E3_BASE_SRC_PATH)/configure/os/
+endif
+ifneq (,$(findstring linux-cortexa9hf-neon,$(E3_CROSS_COMPILER_TARGET_ARCHS)))
+	$(QUIET) install -m 644 $(TOP)/configure/os/CONFIG_SITE.Common.linux-cortexa9hf-neon  $(TOP)/$(E3_BASE_SRC_PATH)/configure/os/
 endif
 
 
@@ -89,7 +91,7 @@ copystartup:
 # 3.15.6 has the same issue
 #ifneq (,$(findstring 3.15.5,$(EPICS_SHORT_VERSION)))
 	-$(QUIET) $(SUDO) install -m 755 -d $(E3_BASE_INSTALL_LOCATION_STARTUP)
-	-$(QUIET) $(SUDO) install -m 755    $(EPICS_BASE)/startup/EpicsHostArch* $(E3_BASE_INSTALL_LOCATION_STARTUP) 2> /dev/null || true
+	-$(QUIET) $(SUDO) install -m 755    $(TOP)/$(E3_BASE_SRC_PATH)/startup/EpicsHostArch* $(E3_BASE_INSTALL_LOCATION_STARTUP) 2> /dev/null || true
 #endif
 
 
@@ -130,11 +132,11 @@ $(E3_BASE_SRC_PATH):
 
 # EPICS 7 needs the following command, and EPICS 3 has no side-effect by them,
 # so we uses in both cases git submodule update --init --reference ./
-checkout: 
-	cd $(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
+checkout:
+	cd $(TOP)/$(E3_BASE_SRC_PATH) && git checkout $(EPICS_BASE_TAG)
 ifneq (,$(findstring tags/R7.0.1.1,$(EPICS_BASE_TAG)))
-	cd $(E3_BASE_SRC_PATH) && git clone . modules/ca && git clone . modules/database && git clone . modules/libcom && git submodule update --init
+	cd $(TOP)/$(E3_BASE_SRC_PATH) && git clone . modules/ca && git clone . modules/database && git clone . modules/libcom && git submodule update --init
 else
-	cd $(E3_BASE_SRC_PATH) && git submodule update --init ./
+	cd $(TOP)/$(E3_BASE_SRC_PATH) && git submodule update --init ./
 endif
 
