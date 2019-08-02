@@ -1,0 +1,13 @@
+diff --git configure/RULES_BUILD configure/RULES_BUILD
+index 2a78a96b1..b9a43e2c2 100644
+--- configure/RULES_BUILD
++++ configure/RULES_BUILD
+@@ -307,7 +307,7 @@ $(LOADABLE_SHRLIBNAME): $(LOADABLE_SHRLIB_PREFIX)%$(LOADABLE_SHRLIB_SUFFIX):
+ 
+ $(LIBNAME) $(SHRLIBNAME) $(LOADABLE_SHRLIBNAME): | $(INSTALL_LIB)
+ $(INSTALL_LIB):
+-	@$(MKDIR) $@
++#	@$(MKDIR) $@
+ 
+ #---------------------------------------------------------------
+ # C++ munching for VxWorks
