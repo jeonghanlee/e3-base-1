@@ -1,0 +1,13 @@
+Submodule modules/pva2pva contains modified content
+diff --git modules/pva2pva/pdbApp/pvif.cpp modules/pva2pva/pdbApp/pvif.cpp
+index 2a681a5..0b91c16 100644
+--- modules/pva2pva/pdbApp/pvif.cpp
++++ modules/pva2pva/pdbApp/pvif.cpp
+@@ -682,6 +682,7 @@ ScalarBuilder::dtype(dbChannel *channel)
+     if(dbr==DBR_ENUM)
+         builder = builder->setId("epics:nt/NTEnum:1.0")
+                          ->addNestedStructure("value")
++	                    ->setId("enum_t")
+                             ->add("index", pvd::pvInt)
+                             ->addArray("choices", pvd::pvString)
+                          ->endNested();
