@@ -17,8 +17,6 @@ EOF
 
 
 make init
-
-bash pkg_automation/pkg_automation.bash -y
 make env
 make patch
 
