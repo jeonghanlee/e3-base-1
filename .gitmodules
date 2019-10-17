@@ -3,7 +3,3 @@
 	url = https://github.com/epics-base/epics-base
 	branch = 7.0
 	ignore = all
-[submodule "pkg_automation"]
-	path = pkg_automation
-	url = https://github.com/jeonghanlee/pkg_automation
-	ignore = all

@@ -106,13 +106,7 @@ patchrevert:
 	$(QUIET) $(call patch_revert_site,$(E3_BASE_VERSION))
 
 
-.PHONY: pkgs $(PKG_AUTOMATION_NAME) init git-submodule-sync $(E3_BASE_SRC_PATH)  checkout
-
-
-
-## Install Required Packages for E3
-pkgs: $(PKG_AUTOMATION_NAME)
-	$(QUIET) bash $</pkg_automation.bash
+.PHONY: init git-submodule-sync $(E3_BASE_SRC_PATH)  checkout
 
 
 ## Initialize : $(E3_BASE_SRC_PATH) 
@@ -122,9 +116,6 @@ init: git-submodule-sync  $(E3_BASE_SRC_PATH)  $(PKG_AUTOMATION_NAME) checkout
 git-submodule-sync:
 	$(QUIET) git submodule sync
 
-
-$(PKG_AUTOMATION_NAME):
-	$(QUIET) $(git_update)
 
 $(E3_BASE_SRC_PATH): 
 	$(QUIET) $(git_base_update)
