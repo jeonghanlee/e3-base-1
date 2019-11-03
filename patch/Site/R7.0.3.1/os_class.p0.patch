@@ -1,0 +1,13 @@
+diff --git configure/CONFIG_APP_INCLUDE configure/CONFIG_APP_INCLUDE
+index 8b4bd7d08..0b1bb22a9 100644
+--- configure/CONFIG_APP_INCLUDE
++++ configure/CONFIG_APP_INCLUDE
+@@ -19,7 +19,7 @@ define  RELEASE_FLAGS_template
+   $(1)_LIB = $$(wildcard $$(strip $$($(1)))/lib/$(T_A))
+   SHRLIB_SEARCH_DIRS += $$($(1)_LIB)
+   RELEASE_INCLUDES += $$(addprefix -I,$$(wildcard $$(strip $$($(1)))/include/compiler/$(CMPLR_CLASS)))
+-  RELEASE_INCLUDES += $$(addprefix -I,$$(wildcard $$(strip $$($(1)))/include/os/$(OS_CLASS)))
++  RELEASE_INCLUDES += $$(addprefix -I,$$(wildcard $$(strip $$($(1)))/include/os/$$(OS_CLASS))))
+   RELEASE_INCLUDES += $$(addprefix -I,$$(wildcard $$(strip $$($(1)))/include))
+   RELEASE_DBD_DIRS += $$(wildcard $$(strip $$($(1)))/dbd)
+   RELEASE_DB_DIRS += $$(wildcard $$(strip $$($(1)))/db)

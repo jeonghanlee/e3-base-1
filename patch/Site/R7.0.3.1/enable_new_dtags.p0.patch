@@ -1,0 +1,15 @@
+diff --git configure/CONFIG.gnuCommon configure/CONFIG.gnuCommon
+index c4fd8cedd..d30910c5a 100644
+--- configure/CONFIG.gnuCommon
++++ configure/CONFIG.gnuCommon
+@@ -57,8 +57,8 @@ STATIC_LDFLAGS_YES = -static
+ STATIC_LDFLAGS_NO =
+ 
+ SHRLIB_CFLAGS = -fPIC
+-SHRLIB_LDFLAGS = -shared -fPIC
+-LOADABLE_SHRLIB_LDFLAGS = -shared -fPIC
++SHRLIB_LDFLAGS = -shared -fPIC  -Wl,--enable-new-dtags
++LOADABLE_SHRLIB_LDFLAGS = -shared -fPIC  -Wl,--enable-new-dtags
+ 
+ GNU_LDLIBS_YES = -lgcc
+ 
