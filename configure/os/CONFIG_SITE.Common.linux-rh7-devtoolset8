@@ -1,0 +1,68 @@
+# -*- mode: makefile; -*-
+#
+#  Copyright (c) 2019   European Spallation Source ERIC
+#
+#  The program is free software: you can redistribute
+#  it and/or modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation, either version 2 of the
+#  License, or any newer version.
+#
+#  This program is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+#  more details.
+#
+#  You should have received a copy of the GNU General Public License along with
+#  this program. If not, see https://www.gnu.org/licenses/gpl-2.0.txt
+#
+#
+#   author  : Jeong Han Lee
+#   email   : jeonghan.lee@gmail.com
+#   date    : Thursday, November  7 10:47:17 CET 2019
+#   version : 
+
+
+include $(CONFIG)/os/CONFIG.Common.linux-x86_64
+
+TOOLCHAIN_PATH=$(E3_CC_RH7_DEVTOOLSET8)
+
+COMMANDLINE_LIBRARY = READLINE
+
+
+SYSROOTS=$(TOOLCHAIN_PATH)/root
+
+# Local SDKTARGETSYSROOT is defined in environment-setup-*-linux
+#
+SDKTARGETSYSROOT=$(SYSROOTS)
+
+CROSS_INCLUDES =
+
+
+TOOLCHAIN_CFLAG = --sysroot=$(SDKTARGETSYSROOT) 
+
+ARCH_DEP_CPPFLAGS += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CFLAGS   += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_CXXFLAGS += $(TOOLCHAIN_CFLAG)
+ARCH_DEP_LDFLAGS  += --sysroot=$(SDKTARGETSYSROOT)
+
+# We remove -02 -g flags, becasue the CONFIG.Common.linux-x86_64
+ARCH_DEP_CFLAGS   += -pipe -feliminate-unused-debug-types 
+ARCH_DEP_CXXFLAGS += -pipe -feliminate-unused-debug-types
+ARCH_DEP_LDFLAGS  += -Wl,-O1
+ARCH_DEP_LDFLAGS  += -Wl,--hash-style=gnu
+ARCH_DEP_LDFLAGS  += -Wl,--as-needed
+
+
+OECORE_NATIVE=
+
+
+# GNU_TARGET and GNU_DIR reu
+# EPICS GNU_DIR is the same as
+#
+GNU_DIR=$(SYSROOTS)/usr
+
+# GNU_BIN is defined in CONFIG.gnuCommon as follows:
+# GNU_BIN = $(GNU_DIR)/bin
+
+
+PYTHONHOME=$(SDKTARGETSYSROOT)/usr
