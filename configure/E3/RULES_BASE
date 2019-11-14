@@ -64,9 +64,6 @@ build: conf
 # consistent with all other modules, do nothing
 install:
 
-# all
-all: init patch build
-
 conf: $(E3_BASE_VERSION) copystartup 
 
 
