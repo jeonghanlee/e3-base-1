@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := help
 
 
-.PHONY: help default  distclean clean uninstall $(E3_BASE_INSTALL_LOCATION)
+.PHONY: help default  distclean clean uninstall $(E3_BASE_INSTALL_LOCATION) all
 
 
 
@@ -64,6 +64,9 @@ build: conf
 # consistent with all other modules, do nothing
 install:
 
+# all
+all: init patch build
+
 conf: $(E3_BASE_VERSION) copystartup 
 
 
@@ -110,7 +113,7 @@ patchrevert:
 
 
 ## Initialize : $(E3_BASE_SRC_PATH) 
-init: git-submodule-sync  $(E3_BASE_SRC_PATH)  $(PKG_AUTOMATION_NAME) checkout
+init: git-submodule-sync  $(E3_BASE_SRC_PATH)  checkout
 
 
 git-submodule-sync:
