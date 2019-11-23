@@ -7,7 +7,7 @@ index 82165fd..5181ee5 100644
  
  USR_CPPFLAGS += -DFINAL_LOCATION="\"$(FINAL_LOCATION)\""
  
-+USR_LDFLAGS  += -Wl,--no-as-needed
++USR_LDFLAGS_Linux  += -Wl,--no-as-needed
 +
  PROD_IOC += softIocPVA
  
