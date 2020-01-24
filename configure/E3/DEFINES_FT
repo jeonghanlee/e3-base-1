@@ -3,7 +3,7 @@ E3_CROSS_COMPILER_TARGET_ARCHS ?=
 
 define git_update =
 git submodule deinit -f $@/
-sed -i '/submodule/,24465d'  $(TOP)/.git/config
+sed '/submodule/,24465d'  $(TOP)/.git/config >/tmp/$$ && mv -f /tmp/$$ $(TOP)/.git/config
 rm -rf $(TOP)/.git/modules/$@
 git submodule init $@/
 git submodule update --init --recursive $@/
@@ -13,7 +13,7 @@ endef
 
 define git_base_update =
 git submodule deinit -f $@/
-sed -i '/submodule/,$$d'  $(TOP)/.git/config	
+sed '/submodule/,$$d'  $(TOP)/.git/config >/tmp/$$ && mv -f /tmp/$$ $(TOP)/.git/config
 git submodule init $@/
 git submodule update --init --recursive $@/
 endef
