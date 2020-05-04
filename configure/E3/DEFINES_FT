@@ -11,7 +11,7 @@ git submodule update --remote --merge $@/
 endef
 
 
-define git_base_update =
+define git_base_update
 git submodule deinit -f $@/
 sed '/submodule/,$$d'  $(TOP)/.git/config >/tmp/$$ && mv -f /tmp/$$ $(TOP)/.git/config
 git submodule init $@/
