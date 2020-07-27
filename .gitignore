@@ -14,3 +14,4 @@ core.*
 \#*
 *-dev
 *.local
+epics-base
